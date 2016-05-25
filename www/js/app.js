@@ -1,11 +1,17 @@
-// Ionic Starter App
+angular.module('journal-material', [
+  'ionic', 
+  //'ionic-material',
+  
+  'journal-material.controllers', 
+  'journal-material.services',
 
-// angular.module is a global place for creating, registering and retrieving Angular modules
-// 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
-// the 2nd parameter is an array of 'requires'
-// 'starter.services' is found in services.js
-// 'starter.controllers' is found in controllers.js
-angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
+  /** QUESTS MODULE **/
+  'journal-material.Quests.controllers',
+  'journal-material.Quests.services',
+  'journal-material.Quests.directives'
+  /** FIN: QUESTS MODULE **/
+
+])
 
 .run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
@@ -25,61 +31,91 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
 
 .config(function($stateProvider, $urlRouterProvider) {
 
-  // Ionic uses AngularUI Router which uses the concept of states
-  // Learn more here: https://github.com/angular-ui/ui-router
-  // Set up the various states which the app can be in.
-  // Each state's controller can be found in controllers.js
   $stateProvider
 
-  // setup an abstract state for the tabs directive
-    .state('tab', {
-    url: '/tab',
+  .state('app', {
+    url: '/app',
     abstract: true,
-    templateUrl: 'templates/tabs.html'
+    templateUrl: 'templates/menu.html',
+    controller: 'MainCtrl'
   })
 
-  // Each tab has its own nav history stack:
+  /*** QUESTS MODULE **/
+  .state('app.quests', {
+    url: '/quests',
+    views:{
+      content: {
+        templateUrl: 'templates/quests/main.html',
+        controller: 'journal-material.Quests.controllers.MainCtrl'
+      },
+      "context-menu": {
+        template: 'templates/quests/context-menu.html',
+        controller: function(){}
+      }
+    } 
+  })
 
-  .state('tab.dash', {
-    url: '/dash',
+  .state('app.quests-focus', {
+    url: '/focus',
     views: {
-      'tab-dash': {
-        templateUrl: 'templates/tab-dash.html',
-        controller: 'DashCtrl'
+      content: {
+        templateUrl: 'templates/quests/focus.html',
+        controller: 'journal-material.Quests.controllers.FocusCtrl'
+      },
+      "context-menu": {
+        template: 'templates/quests/context-menu.html',
+        controller: function(){}
       }
     }
   })
 
-  .state('tab.chats', {
-      url: '/chats',
-      views: {
-        'tab-chats': {
-          templateUrl: 'templates/tab-chats.html',
-          controller: 'ChatsCtrl'
-        }
-      }
-    })
-    .state('tab.chat-detail', {
-      url: '/chats/:chatId',
-      views: {
-        'tab-chats': {
-          templateUrl: 'templates/chat-detail.html',
-          controller: 'ChatDetailCtrl'
-        }
-      }
-    })
-
-  .state('tab.account', {
-    url: '/account',
+  .state('app.quests-listings', {
+    url: '/quests/list/{status}',
     views: {
-      'tab-account': {
-        templateUrl: 'templates/tab-account.html',
-        controller: 'AccountCtrl'
+      content: {
+        templateUrl: 'templates/quests/listing.html',
+        controller: 'journal-material.Quests.controllers.ListingCtrl'
+      },
+      "context-menu": {
+        template: 'templates/quests/context-menu.html',
+        controller: function(){}
       }
     }
-  });
+  })
+
+  .state('app.quest-edit', {
+    url: '/quests/edit/{id}',
+    views: {
+      content: {
+        templateUrl: 'templates/quests/edit.html',
+        controller: 'journal-material.Quests.controllers.EditCtrl'
+      },
+      "context-menu": {
+        template: 'templates/quests/context-menu.html',
+        controller: function(){}
+      }
+    }
+  }) 
+
+  .state('app.quest-detail', {
+    url: '/quests/show/{id}',
+    views: {
+      content: {
+        templateUrl: 'templates/quests/detail.html',
+        controller: 'journal-material.Quests.DetailCtrl'
+      },
+      "context-menu": {
+        template: 'templates/quests/context-menu.html',
+        controller: function(){}
+      }
+    }
+  })
+
+  /*** END: QUESTS MODULE **/
+
+  ;
 
   // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise('/tab/dash');
+  $urlRouterProvider.otherwise('/app/quests');
 
 });
