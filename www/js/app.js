@@ -40,36 +40,57 @@ angular.module('journal-material', [
     controller: 'MainCtrl'
   })
 
-  /*** QUESTS MODULE **/
-  .state('app.quests', {
-    url: '/quests',
+  .state('app.dashboard', {
+    url: '/dash',
     views:{
       content: {
-        templateUrl: 'templates/quests/main.html',
-        controller: 'journal-material.Quests.controllers.MainCtrl'
-      },
-      "context-menu": {
-        template: 'templates/quests/context-menu.html',
+        templateUrl: 'templates/dashboard.html',
         controller: function(){}
-      }
-    } 
-  })
-
-  .state('app.quests-focus', {
-    url: '/focus',
-    views: {
-      content: {
-        templateUrl: 'templates/quests/focus.html',
-        controller: 'journal-material.Quests.controllers.FocusCtrl'
       },
       "context-menu": {
-        template: 'templates/quests/context-menu.html',
+        templateUrl: 'templates/context-menu.html',
         controller: function(){}
       }
     }
   })
 
-  .state('app.quests-listings', {
+  /*** QUESTS MODULE **/
+  .state('app.quests', {
+    url: '/quests',
+    abstract: true,
+    views:{
+      content: {
+        template: '<ion-nav-view name="content"></ion-nav-view>',
+        controller: 'journal-material.Quests.controllers.MainCtrl'
+      },
+      "context-menu": {
+        templateUrl: 'templates/context-menu.html',
+        controller: 'journal-material.Quests.controllers.ContextController'
+      }
+    }
+  })
+
+  .state('app.quests.all', {
+    url: '/all',
+    views:{
+      content: {
+        templateUrl: 'templates/quests/main.html',
+        controller: 'journal-material.Quests.controllers.AllCtrl'
+      }
+    } 
+  })
+
+  .state('app.quests.focus', {
+    url: '/focus',
+    views: {
+      content: {
+        templateUrl: 'templates/quests/focus.html',
+        controller: 'journal-material.Quests.controllers.FocusCtrl'
+      }
+    }
+  })
+
+  .state('app.quests.listings', {
     url: '/quests/list/{status}',
     views: {
       content: {
@@ -83,7 +104,7 @@ angular.module('journal-material', [
     }
   })
 
-  .state('app.quest-edit', {
+  .state('app.quest.edit', {
     url: '/quests/edit/{id}',
     views: {
       content: {
@@ -97,25 +118,50 @@ angular.module('journal-material', [
     }
   }) 
 
-  .state('app.quest-detail', {
+  .state('app.quest.detail', {
     url: '/quests/show/{id}',
     views: {
       content: {
         templateUrl: 'templates/quests/detail.html',
         controller: 'journal-material.Quests.DetailCtrl'
-      },
-      "context-menu": {
-        template: 'templates/quests/context-menu.html',
-        controller: function(){}
       }
     }
   })
 
   /*** END: QUESTS MODULE **/
 
+  /*** CODEX MODULE **/
+
+  .state('app.codex', {
+    url: '/codex',
+    abstract: true,
+    views:{
+      content: {
+        template: '<ion-nav-view name="content"></ion-nav-view>',
+        //controller: 'journal-material.Codex.controllers.CodexCtrl'
+      },
+      "context-menu": {
+        templateUrl: 'templates/context-menu.html',
+        //controller: 'journal-material.Codex.controllers.ContextController'
+      }
+    }
+  })
+
+  .state('app.codex.main', {
+    url: '/all',
+    views:{
+      content: {
+        templateUrl: 'templates/codex/main.html',
+        //controller: 'journal-material.Quests.Codex.MainCtrl'
+      }
+    }
+  })
+
+  /*** END: CODEX MODULE **/
+
   ;
 
   // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise('/app/quests');
+  $urlRouterProvider.otherwise('/app/quests/all');
 
 });
