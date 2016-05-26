@@ -91,7 +91,7 @@
 
 /*** QUEST LOG OVERVIEW **/
 .hero.quest-log-overview {
-	background-image: url('/img/firelink.jpg');
+	background-image: url('../img/firelink.jpg');
 }
 
 .journal-app .hero>.content {
@@ -112,24 +112,24 @@
 
 /*** QUEST LOG FOCUS ***/
 .hero.quest-log-focus {
-	background-image: url('/img/focus.png');
+	background-image: url('../img/focus.png');
 }
 /*** END: QUEST LOG FOCUS ***/
 
 /*** QUEST LOG LISTINGS ***/
 .hero.quest-log-listings {
-	background-image: url('/img/listings.png');
+	background-image: url('../img/listings.png');
 }
 /*** END: QUEST LOG LISTINGS ***/
 
 /*** CODEX MAIN ***/
 .hero.codex-main {
-	background-image: url('/img/codex.png');
+	background-image: url('../img/codex.png');
 }
 /*** END: CODEX MAIN ***/
 
 /*** JOURNAL MAIN ***/
 .hero.journal-main {
-	background-image: url('/img/journal.png');
+	background-image: url('../img/journal.png');
 }
 /*** END: JOURNAL MAIN ***/
