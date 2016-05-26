@@ -1,1 +1,74 @@
-/* Empty. Add your own CSS if you like */
+.bar.journal-menu-bar {
+	border-style: none;
+}
+
+.transp-bg, .bar.transp-bg {
+	background-color: transparent;
+}
+
+.item.item-complex.transp-bg,
+.item.item-complex.transp-bg a.item-content {
+	background-color: transparent;
+}
+
+.item.item-complex.clear-color {
+	color: white;
+}
+
+.journal-menu .item-complex .item-content {
+	padding: 10px 0;
+}
+
+.item.item-complex.line-decoration {
+	margin-left: 1em;
+    width: 15em;
+    border-bottom: 0.2px ridge #D6C78F;
+}
+
+.pane {
+    background-color: #440E0E !important;
+}
+
+.context-menu {
+	padding-left: 1em;
+}
+
+.context-menu .item.item-complex.line-decoration {
+	width: 13em;
+}
+
+.profile-avatar-menu {
+	width: 100px;
+    height: 100px;
+    border-radius: 50%;
+}
+
+.bar.bar-header.expanded, .expanded .bar.bar-header {
+	height: 225px;
+}
+
+.bar.bar-header h1, .bar.bar-header h2, .bar.bar-header h3, 
+.bar.bar-header h4, .bar.bar-header h5, .bar.bar-header h6 {
+	color: white;
+}
+
+.bar.bar-header h5 {
+	font-style: italic;
+	color: #;
+}
+
+.has-expanded-header {
+    top: 225px!important;
+}
+
+.full-block {
+	min-width: 100%;
+}
+
+.center {
+	text-align: center;
+}
+
+.ptop2 {
+	padding-top: 20px;
+}

@@ -1,4 +1,4 @@
-<ion-side-menus enable-menu-with-back-views="true">
+<ion-side-menus enable-menu-with-back-views="true" class="journal-menu">
 	<ion-side-menu-content>
 		<ion-nav-bar class="bar-assertive" ng-class="{expanded: isExpanded}" align-title="center">
 			<ion-nav-back-button class="no-text">
@@ -11,8 +11,13 @@
 	</ion-side-menu-content>
 
 	<ion-side-menu side="right">
-		<ion-header-bar class="dark-bg">
-			<h2>Journal</h2>
+		<ion-header-bar class="transp-bg expanded journal-menu-bar">
+			<div class="full-block center ptop2">
+				<img src="img/profile-avatar.png" class="profile-avatar-menu"/>
+				<h4>Mizhal</h4>
+				<h5>Assassin</h5>
+				<h6>Bearer of the flame</h6>
+			</div>
 		</ion-header-bar>
 		<ion-nav-view name="context-menu"></ion-nav-view>
 	</ion-side-menu>
