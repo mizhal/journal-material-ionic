@@ -1,5 +1,64 @@
-<ion-view view-title="Dashboard">
+<ion-view view-title="Dashboard" class="dashboard">
 	<ion-content>
-		<h1>Dashboard</h1>
+		<div class="row">
+			<div class="col-75">
+				<div class="tile-frame">
+					<a ui-sref="app.quests.all">
+						<figure>
+							<img src="./img/firelink.jpg"></img>
+							<figcaption>Quest Log</figcaption>
+						</figure>
+					</a>
+				</div>
+			</div>
+			<div class="col-25">
+				<div class="tile-frame">
+					<a ui-sref="app.quests.focus">
+						<figure>
+							<img src="./img/focus.png"></img>
+							<figcaption>Focus</figcaption>
+						</figure>
+					</a>
+				</div>
+				<div class="tile-frame">
+					<a ui-sref="app.quests.listings({status:'BLOCKED'})">
+						<figure>
+							<img src="./img/listings.png"></img>
+							<figcaption>Waiting</figcaption>
+						</figure>
+					</a>
+				</div>
+				<div class="tile-frame">
+					<a ui-sref="app.quests.listings({status:'OPEN'})">
+						<figure>
+							<img src="./img/listings.png"></img>
+							<figcaption>Open</figcaption>
+						</figure>
+					</a>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-50">
+				<div class="tile-frame">
+					<a ui-sref="app.codex.main">
+						<figure>
+							<img src="./img/codex.png"></img>
+							<figcaption>Codex</figcaption>
+						</figure>
+					</a>
+				</div>
+			</div>
+			<div class="col-50">
+				<div class="tile-frame">
+					<a ui-sref="app.journal.main">
+						<figure>
+							<img src="./img/journal.png"></img>
+							<figcaption>Journal</figcaption>
+						</figure>
+					</a>
+				</div>
+			</div>
+		</div>
 	</ion-content>
 </ion-view>
