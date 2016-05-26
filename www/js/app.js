@@ -159,9 +159,36 @@ angular.module('journal-material', [
 
   /*** END: CODEX MODULE **/
 
+  /*** JOURNAL MODULE ***/
+  .state('app.journal', {
+    url: '/journal',
+    abstract: true,
+    views:{
+      content: {
+        template: '<ion-nav-view name="content"></ion-nav-view>',
+        //controller: 'journal-material.Codex.controllers.CodexCtrl'
+      },
+      "context-menu": {
+        templateUrl: 'templates/context-menu.html',
+        //controller: 'journal-material.Codex.controllers.ContextController'
+      }
+    }
+  })
+
+  .state('app.journal.main', {
+    url: '/all',
+    views:{
+      content: {
+        templateUrl: 'templates/journal/main.html',
+        //controller: 'journal-material.Quests.Codex.MainCtrl'
+      }
+    }
+  })
+  /*** END: JOURNAL MODULE ***/
+
   ;
 
   // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise('/app/quests/all');
+  $urlRouterProvider.otherwise('/app/dash');
 
 });

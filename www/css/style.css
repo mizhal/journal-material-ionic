@@ -1,3 +1,23 @@
+/*** COMMON MIXINS **/
+.full-block {
+	min-width: 100%;
+}
+
+.center {
+	text-align: center;
+}
+
+.ptop2 {
+	padding-top: 20px;
+}
+
+.button-right-second {
+	right: 88px!important;
+}
+/*** END: COMMON MIXINS **/
+
+/*** MENU **/
+
 .bar.journal-menu-bar {
 	border-style: none;
 }
@@ -15,7 +35,7 @@
 	color: white;
 }
 
-.journal-menu .item-complex .item-content {
+.journal-app .item-complex .item-content {
 	padding: 10px 0;
 }
 
@@ -61,14 +81,49 @@
     top: 225px!important;
 }
 
-.full-block {
-	min-width: 100%;
+/*** END: MENU **/
+
+/*** QUEST LOG OVERVIEW **/
+.hero.quest-log-overview {
+	background-image: url('/img/firelink.jpg');
 }
 
-.center {
-	text-align: center;
+.journal-app .hero>.content {
+	bottom: 50%;
+	text-align: left
 }
 
-.ptop2 {
-	padding-top: 20px;
+.assassins-creed-titles h2 {
+    margin-left: 1em;
+    margin-bottom: -50%;
+    padding: 0.1em 2em 0.3em 0.5em;
+    background-color: rgba(0,0,0,0.5);
+    display: inline-block;
+    color: white;
+    font-size: 2.5em;
 }
+/*** END: QUEST LOG OVERVIEW **/
+
+/*** QUEST LOG FOCUS ***/
+.hero.quest-log-focus {
+	background-image: url('/img/focus.png');
+}
+/*** END: QUEST LOG FOCUS ***/
+
+/*** QUEST LOG LISTINGS ***/
+.hero.quest-log-listings {
+	background-image: url('/img/listings.png');
+}
+/*** END: QUEST LOG LISTINGS ***/
+
+/*** CODEX MAIN ***/
+.hero.codex-main {
+	background-image: url('/img/codex.png');
+}
+/*** END: CODEX MAIN ***/
+
+/*** JOURNAL MAIN ***/
+.hero.journal-main {
+	background-image: url('/img/journal.png');
+}
+/*** END: JOURNAL MAIN ***/
