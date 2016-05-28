@@ -1,12 +1,48 @@
-<ion-view view-title="Quests">
+<ion-view view-title="Quests" class="quest-log-overview">
 	<ion-content>
 		<div class="hero quest-log-overview">
 			<div class="content assassins-creed-titles">
 				<h2>Quests</h2>
 			</div>
-			<button class="button button-fab button-fab-bottom-right button-right-second"></button>
-			<button class="button button-fab button-fab-bottom-right"></button>
+			<button class="button button-energized button-fab button-fab-bottom-right button-right-second"><i class="icon ion-plus"></i></button>
+			<button class="button button-energized button-fab button-fab-bottom-right"><i class="icon ion-stats-bars"></i></button>
 		</div>
-		<div class="separator theme"></div>
+		<section class="quests">
+			<div class="separator1"></div>
+			<h3><i class="icon ion-ios-clock"></i> Waiting <a ui-sref="app.quests.listings({status:'BLOCKED'})"><i class="icon right ion-ios-play"></i></a></h3>
+			<div class="separator1"></div>
+		</section>
+
+		<section class="quests">
+			<div class="separator1"></div>
+			<h3><i class="icon ion-eye"></i> Focus <a ui-sref="app.quests.focus"><i class="icon right ion-ios-play"></i></a></i></h3>
+			<div class="separator1"></div>
+		</section>
+
+		<section class="quests">
+			<div class="separator1"></div>
+			<h3><i class="icon ion-ios-pie"></i> Open <a ui-sref="app.quests.listings({status:'OPEN'})"><i class="icon right ion-ios-play"></i></a></h3>
+			<div class="separator1"></div>
+		</section>
+
+		<ion-list>
+			<ion-item>
+				<div class="separator1"></div>
+				<h3><i class="icon ion-android-calendar"></i> Scheduled <a ui-sref="app.quests.listings({status:'SCHEDULED'})"><i class="icon right ion-ios-play"></i></a></h3>
+			</ion-item>
+			<ion-item>
+				<div class="separator1"></div>
+				<h3><i class="icon ion-android-cancel"></i> Cancelled <a ui-sref="app.quests.listings({status:'CANCELLED'})"><i class="icon right ion-ios-play"></i></a></h3>
+			</ion-item>
+			<ion-item>
+				<div class="separator1"></div>
+				<h3><i class="icon ion-thumbsdown"></i> Failed <a ui-sref="app.quests.listings({status:'FAILED'})"><i class="icon right ion-ios-play"></i></a></h3>
+			</ion-item>
+			<ion-item>
+				<div class="separator1"></div>
+				<h3><i class="icon ion-ios-checkmark"></i> Done <a ui-sref="app.quests.listings({status:'DONE'})"><i class="icon right ion-ios-play"></i></a></h3>
+				<div class="separator1"></div>
+			</ion-item>
+		</ion-list>
 	</ion-content>
 </ion-view>
