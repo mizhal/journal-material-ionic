@@ -2,7 +2,8 @@ angular.module('journal-material', [
   'ionic', 
   //'ionic-material',
   
-  'journal-material.controllers', 
+  'journal-material.controllers',
+  'journal-material.service-localdb', 
   'journal-material.services',
 
   /** QUESTS MODULE **/

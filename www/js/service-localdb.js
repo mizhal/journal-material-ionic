@@ -2,7 +2,7 @@ angular.module('journal-material.service-localdb', [])
 
 .service("journal-material.service-localdb.DBService", [
 	"$http",
-	"$q"
+	"$q",
 	function($http, $q){
 
 		var self = this;
