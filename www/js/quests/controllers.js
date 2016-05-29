@@ -14,9 +14,19 @@ angular.module('journal-material.Quests.controllers', [])
 	];
 })
 
-.controller('journal-material.Quests.controllers.AllCtrl', function($scope){
-
-})
+.controller('journal-material.Quests.controllers.AllCtrl', [
+	"$scope",
+	"journal-material.Quests.services.QuestService",
+	"$q",
+	"journal-material.services.SortCriteriaEnumService",
+	function($scope, QuestService, $q, SortCriteriaEnumService){
+		$scope.sorting = SortCriteriaEnumService.Enum.UPDATED_DESC;
+		
+		QuestService.GetSummarizedQuestLog($scope.sorting).then(function(response){
+			$scope.quest_log = response;
+		});
+	}
+])
 
 .controller('journal-material.Quests.controllers.FocusCtrl', function($scope){
 

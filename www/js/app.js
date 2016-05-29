@@ -192,3 +192,12 @@ angular.module('journal-material', [
   $urlRouterProvider.otherwise('/app/dash');
 
 });
+
+/*** COMMON FUNCS **/
+function local_url(url){
+  if(ionic.Platform.isAndroid()){
+    return "/android_asset/www" + url;
+  } 
+  return url;
+}
+/*** END: COMMON FUNCS **/
