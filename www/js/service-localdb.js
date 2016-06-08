@@ -1,46 +1,38 @@
 angular.module('journal-material.service-localdb', [])
 
-.service("journal-material.service-localdb.DBService", [
-	"$http",
+.service("journal-material.service-localdb.DBService",
+[
 	"$q",
-	function($http, $q){
-
+	function($q){
 		var self = this;
-		var dataset = {};
-		var config_defer = $q.defer();
-		var initialized = function(){ return self.config_defer.promise; }
+		
+		this.Pouch = new PouchDB("journal-ionic-material");
 
-		/** PUBLIC **/
-		var __init__ = function(){
-			return $q
-				.all([
-					InitDatabase(), 
-					CreateIndices()
-				])
-				.then(function(response){
-						self.config_defer.resolve();
-				},function(error){
-						self.config_defer.reject();
-				})
-			;
+		this.save = function(object) {
+			object.updated_at = new Date();
+			return self.Pouch.put(object)
+				.then(function(docsum){
+					object._rev = docsum.rev;
+					return docsum;
+				});
 		};
-		/** END: PUBLIC **/
 
-		/** PRIVATE **/
-		var InitDatabase = function(){
-			return $http({
-				method: "GET",
-				url: local_url("/js/data/mock-db.json")
-			}).then(
-				function(response){
-					self.dataset = response.data;
-				},
-				function(error){
+		this.get = function(_id){
+			return self.Pouch.get(_id);
+		};
 
-				}
-			);
+		this.queryView = function(view, options){
+			options = options || {};
+			return self.Pouch.query(view, options);
 		}
-		/** END: PRIVATE **/
+
+		this.mapReduce = function(map_reduce){
+			return self.Pouch.query(map_reduce);
+		}
+
+		this.destroy = function(object){
+			return self.Pouch.remove(object);
+		};
 	}
 ])
 
