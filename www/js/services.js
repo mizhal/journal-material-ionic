@@ -3,7 +3,7 @@ angular.module('journal-material.services', [])
 .service("journal-material.services.SortCriteriaService", function(){
 		var self = this;
 
-		this.sort_criteria = {
+		this.Enum = {
 			DATE_DESC: "DATE_DESC",
 			DATE_ASC: "DATE_ASC",
 			NAME_DESC: "NAME_DESC",

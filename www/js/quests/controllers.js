@@ -18,9 +18,9 @@ angular.module('journal-material.Quests.controllers', [])
 	"$scope",
 	"journal-material.Quests.services.QuestService",
 	"$q",
-	"journal-material.services.SortCriteriaEnumService",
-	function($scope, QuestService, $q, SortCriteriaEnumService){
-		$scope.sorting = SortCriteriaEnumService.Enum.UPDATED_DESC;
+	"journal-material.services.SortCriteriaService",
+	function($scope, QuestService, $q, SortCriteriaService){
+		$scope.sorting = SortCriteriaService.Enum.UPDATED_DESC;
 		
 		QuestService.GetSummarizedQuestLog($scope.sorting).then(function(response){
 			$scope.quest_log = response;

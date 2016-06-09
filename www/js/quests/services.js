@@ -1,8 +1,8 @@
 angular.module('journal-material.Quests.services', [])
 
-.service("journal-material.Quests.services.QuestStatusEnumService", [
+.service("journal-material.Quests.services.EnumService", [
 	function(){
-		this.Enum = {
+		this.QuestStatus = {
 			OPEN: "OPEN", 
 			FOCUS: "FOCUS", 
 			BLOCKED: "BLOCKED", 
@@ -13,7 +13,15 @@ angular.module('journal-material.Quests.services', [])
 			DONE: "DONE"
 		};
 
-		this.EnumTranslation = {
+		this.TaskStatus = {
+			TODO: "TODO",
+			DONE: "DONE",
+			CANCELLED: "CANCEL",
+			FAILED: "FAILED",
+			DELEGATED: "DELEGATED"
+		};
+
+		this.QuestsStatusTranslation = {
 			OPEN: "Abiertas", 
 			FOCUS: "Foco", 
 			BLOCKED: "En espera", 
@@ -28,10 +36,10 @@ angular.module('journal-material.Quests.services', [])
 
 .service("journal-material.Quests.services.QuestService", [ 
 	"$q",
-	"journal-material.services.SortCriteriaEnumService",
+	"journal-material.services.SortCriteriaService",
 	"journal-material.service-localdb.DBService",
-	"journal-material.Quests.services.QuestStatusEnumService",
-	function($q, SortCriteriaEnumService, DBService, QuestStatusEnumService){
+	"journal-material.Quests.services.EnumService",
+	function($q, SortCriteriaService, DBService, EnumService){
 
 		var self = this;
 
@@ -40,7 +48,7 @@ angular.module('journal-material.Quests.services', [])
 
 		/** PUBLIC **/
 		this.TranslateStatus = function(status){
-			return QuestStatusEnumService.EnumTranslation[status];
+			return EnumService.QuestsStatusTranslation[status];
 		}
 
 		this.GetSummarizedQuestLog = function(sort_criteria){
@@ -57,9 +65,9 @@ angular.module('journal-material.Quests.services', [])
 /*** SERVICIO PARA CREAR TABLAS, INDICES, ETC EN BASE DE DATOS LOCAL **/
 .service("journal-material.Quests.services.QuestServiceInitializer", [ 
 	"$q",
-	"journal-material.services.SortCriteriaEnumService",
+	"journal-material.services.SortCriteriaService",
 	"journal-material.service-localdb.DBService",
-	function($q, SortCriteriaEnumService, DBService){
+	function($q, SortCriteriaService, DBService){
 		var self;
 
 		/** DB VIEWS **/
@@ -102,18 +110,14 @@ angular.module('journal-material.Quests.services', [])
 			}
 		};
 		/** END: DB VIEWS **/
-
-		this.CreateIndexByName = function(){};
-		this.CreateIndexByStatus = function(){};
-		this.CreateIndexByUpdated = function(){};
 	}
 ])
 
 .service("journal-material.Quests.services.QuestFactory", [
 
 	"journal-material.services.HasTimestampFactory",
-	"journal-material.Quests.services.QuestStatusEnumService",
-	function(HasTimestampFactory, QuestStatusEnumService){
+	"journal-material.Quests.services.EnumService",
+	function(HasTimestampFactory, EnumService){
 		var self = this;
 		this.type = "Quest";
 		this.interfaces = HasTimestampFactory.interfaces + [this.type];
@@ -128,7 +132,7 @@ angular.module('journal-material.Quests.services', [])
 				description: desc,
 				tasks: [],
 				deadline: null,
-				status: QuestStatusEnumService.Enum.OPEN,
+				status: EnumService.QuestStatus.OPEN,
 				context: null,
 				sections: []
 			});
@@ -138,4 +142,27 @@ angular.module('journal-material.Quests.services', [])
 	}
 ])
 
+.service("journal-material.Quests.services.TaskFactory", [
+
+	"journal-material.services.HasTimestampFactory",
+	"journal-material.Quests.services.EnumService",
+	function(HasTimestampFactory, QuestStatusEnumService){
+		var self = this;
+		this.type = "Task";
+		this.interfaces = HasTimestampFactory.interfaces + [this.type];
+
+		this._new = function(name, desc){
+			var proto = HasTimestampFactory._new();
+
+			Object.assign(proto, {
+				type: self.type,
+				interfaces: self.interfaces,
+				name: name,
+				status: QuestStatusEnumService.TaskStatus.TODO,
+			});
+
+			return proto;
+		}
+	}
+])
 ;
