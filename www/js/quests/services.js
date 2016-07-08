@@ -127,7 +127,6 @@ angular.module('journal-material.Quests.services', [])
 
 			Object.assign(proto, {
 				type: self.type,
-				interfaces: self.interfaces,
 				name: name,
 				description: desc,
 				tasks: [],

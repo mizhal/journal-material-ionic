@@ -87,6 +87,8 @@ angular.module('journal-material.Quests.controllers', [])
 
 		$scope.save = function(){
 			console.log($scope.quest);
+			$scope.must_confirm = false;
+			$ionicHistory.goBack();
 		}
 
 		$scope.cancel = function(){
@@ -95,6 +97,8 @@ angular.module('journal-material.Quests.controllers', [])
 		/** END: METHODS **/
 
 		/** EVENTS **/
+
+		// prevent going out of state without saving
 		$scope.$on("$stateChangeStart", 
 			function(event, toState, fromState, toParams, fromParams){
 				var $scope = event.currentScope;
