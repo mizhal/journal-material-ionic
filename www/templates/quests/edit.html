@@ -1,5 +1,35 @@
-<ion-view view-title="Edit">
+<ion-view view-title="{{action}}">
 	<ion-content>
-		<h1>Edit</h1>
+		<div class="form list">
+			<label class="item item-input">
+				<input type="text" placeholder="Name" ng-model="quest.name"/>
+			</label>
+			<label class="item item-input">
+				<button ng-click="selectDeadline()">{{quest.deadline || "Deadline" | date }}</button>
+			</label>
+			<label class="item item-input item-select">
+				<div class="input-label">
+					Context / Project
+				</div>
+				<select ng-model="quest.context">
+					<option ng-repeat="option in contexts" value="{{option.id}}">{{option.name}}</option>
+				</select>
+			</label>
+			<label class="item item-input item-select">
+				<div class="input-label">
+					Status
+				</div>
+				<select ng-model="quest.status">
+					<option ng-repeat="option in statuses" value="{{option.id}}">{{option.name}}</option>
+				</select>
+			</label>
+			<label class="item item-input">
+				<textarea rows="15" ng-model="quest.description" placeholder="Description"></textarea>
+			</label>
+			<div class="item">
+				<button ng-click="save()">Save</button>
+				<button ng-click="cancel()">Cancel</button>
+			</div>
+		</div>
 	</ion-content>
 </ion-view>

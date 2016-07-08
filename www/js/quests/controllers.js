@@ -43,11 +43,53 @@ angular.module('journal-material.Quests.controllers', [])
 	]
 )
 
-.controller('journal-material.Quests.controllers.EditCtrl', 
-	function($scope, $stateParams){
+.controller('journal-material.Quests.controllers.EditCtrl', [
+	"$scope",
+	"$stateParams",
+	"journal-material.Quests.services.QuestFactory",
+	"ionicDatePicker",
+	function($scope, $stateParams, QuestFactory, ionicDatePicker){
+		$scope.id = $stateParams.id;
+		if($scope.id) {
+			$scope.action = "Edit";
+		} else {
+			$scope.action = "New";
+			$scope.quest = QuestFactory._new();
+		}
 
+		$scope.contexts = [
+			{id: 1, name: "TFG"},
+			{id: 2, name: "GFS"},
+			{id: 3, name: "IOS"}
+		]
+
+		$scope.statuses = [
+			{id: "OPEN", name: "Open"},
+			{id: "FOCUS", name: "Focus"},
+			{id: "WAITING", name: "Waiting"}
+		]
+
+		var deadline_obj = {
+			callback: function(val) {
+				$scope.quest.deadline = val;
+			}
+		}
+
+		/** METHODS **/
+		$scope.selectDeadline = function(){
+			ionicDatePicker.openDatePicker(deadline_obj);
+		}
+
+		$scope.save = function(){
+			console.log($scope.quest);
+		}
+
+		$scope.cancel = function(){
+
+		}
+		/** END: METHODS **/
 	}
-)
+])
 
 .controller('journal-material.Quests.controllers.DetailCtrl',
 	function($scope, $stateParams){
