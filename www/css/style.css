@@ -231,6 +231,10 @@
 	background-color: #440E0E;	
 }
 
+.form button[disabled="disabled"] {
+	background-color: #bbbbbb;		
+}
+
 .form .form-errors {
 	font-size: 9pt;
 	color: #ff0000;

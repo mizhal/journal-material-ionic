@@ -5,7 +5,7 @@
 				<label class="item item-input">
 					<input type="text" name="name" placeholder="Name *" ng-model="quest.name" ng-minlength="3" autocomplete="off" required/>
 				</label>
-				<div ng-messages="questEditForm.name.$error" class="item form-errors">
+				<div ng-messages="questEditForm.name.$error" class="item form-errors" ng-if="questEdit.name.$touched">
 					<div ng-message="required">A name is required</div>
 					<div ng-message="minlength">The name must contain at least 3 letters</div>
 				</div>
@@ -28,14 +28,14 @@
 				<label class="item">
 					<button class="wide" ng-click="selectDeadline()">{{quest.deadline || "Deadline" | date }}</button>
 				</label>
-				<div ng-messages="questEditForm.description.$error" class="item form-errors">
+				<div ng-messages="questEditForm.description.$error" class="item form-errors" ng-if="questEdit.name.$touched">
 					<div ng-message="required">A description is required</div>
 				</div>
 				<label class="item item-input">
 					<textarea name="description" rows="15" ng-model="quest.description" placeholder="Description *" required></textarea>
 				</label>
 				<div class="item">
-					<button ng-click="save(questEditForm)" class="decorated">Save</button>
+					<button ng-click="save(questEditForm)" ng-disabled="questEditForm.$invalid" class="decorated">Save</button>
 					<button ng-click="cancel()" class="decorated">Cancel</button>
 				</div>
 			</div>
