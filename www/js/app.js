@@ -1,6 +1,7 @@
 angular.module('journal-material', [
   'ionic', 
   'ionic-datepicker',
+  'ngMessages',
   //'ionic-material',
   
   'journal-material.controllers',
