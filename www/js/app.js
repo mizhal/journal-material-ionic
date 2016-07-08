@@ -1,5 +1,6 @@
 angular.module('journal-material', [
   'ionic', 
+  'ionic-datepicker',
   //'ionic-material',
   
   'journal-material.controllers',
@@ -105,7 +106,7 @@ angular.module('journal-material', [
     }
   })
 
-  .state('app.quest.edit', {
+  .state('app.quests.edit', {
     url: '/quests/edit/{id}',
     views: {
       content: {
