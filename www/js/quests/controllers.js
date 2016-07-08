@@ -45,15 +45,20 @@ angular.module('journal-material.Quests.controllers', [])
 
 .controller('journal-material.Quests.controllers.EditCtrl', [
 	"$scope",
+	"$rootScope",
 	"$stateParams",
+	"$ionicHistory",
+	"$ionicPopup",
+	"$state",
 	"journal-material.Quests.services.QuestFactory",
 	"ionicDatePicker",
-	function($scope, $stateParams, QuestFactory, ionicDatePicker){
+	function($scope, $rootScope, $stateParams, $ionicHistory, $ionicPopup, $state, QuestFactory, ionicDatePicker){
 		$scope.id = $stateParams.id;
+		$scope.must_confirm = true;
 		if($scope.id) {
-			$scope.action = "Edit";
+			$scope.action = "Edit Quest";
 		} else {
-			$scope.action = "New";
+			$scope.action = "New Quest";
 			$scope.quest = QuestFactory._new();
 		}
 
@@ -85,9 +90,28 @@ angular.module('journal-material.Quests.controllers', [])
 		}
 
 		$scope.cancel = function(){
-
+			$ionicHistory.goBack();
 		}
 		/** END: METHODS **/
+
+		/** EVENTS **/
+		$scope.$on("$stateChangeStart", 
+			function(event, toState, fromState, toParams, fromParams){
+				var $scope = event.currentScope;
+				if($scope.must_confirm){
+					event.preventDefault();
+					$ionicPopup.confirm({
+						title: "Data will be lost!"
+					}).then(function(ok){
+						if(ok) {
+							$scope.must_confirm = false;
+							$state.go(toState, toParams);
+						}
+					})
+				}
+			}
+		)
+		/** END: EVENTS **/
 	}
 ])
 
