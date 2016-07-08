@@ -4,9 +4,6 @@
 			<label class="item item-input">
 				<input type="text" placeholder="Name" ng-model="quest.name"/>
 			</label>
-			<label class="item item-input">
-				<button ng-click="selectDeadline()">{{quest.deadline || "Deadline" | date }}</button>
-			</label>
 			<label class="item item-input item-select">
 				<div class="input-label">
 					Context / Project
@@ -23,12 +20,15 @@
 					<option ng-repeat="option in statuses" value="{{option.id}}">{{option.name}}</option>
 				</select>
 			</label>
+			<label class="item">
+				<button class="wide" ng-click="selectDeadline()">{{quest.deadline || "Deadline" | date }}</button>
+			</label>
 			<label class="item item-input">
 				<textarea rows="15" ng-model="quest.description" placeholder="Description"></textarea>
 			</label>
 			<div class="item">
-				<button ng-click="save()">Save</button>
-				<button ng-click="cancel()">Cancel</button>
+				<button ng-click="save()" class="decorated">Save</button>
+				<button ng-click="cancel()" class="decorated">Cancel</button>
 			</div>
 		</div>
 	</ion-content>
