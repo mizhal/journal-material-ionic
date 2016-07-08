@@ -3,9 +3,9 @@
 		<form name="questEditForm" novalidate>
 			<div class="form list">
 				<label class="item item-input">
-					<input type="text" name="name" placeholder="Name *" ng-model="quest.name" ng-minlength="3" required/>
+					<input type="text" name="name" placeholder="Name *" ng-model="quest.name" ng-minlength="3" autocomplete="off" required/>
 				</label>
-				<div ng-messages="questEditForm.name.$error" class="item form-errors" ng-if="questEditForm.description.$touched">
+				<div ng-messages="questEditForm.name.$error" class="item form-errors">
 					<div ng-message="required">A name is required</div>
 					<div ng-message="minlength">The name must contain at least 3 letters</div>
 				</div>
@@ -28,7 +28,7 @@
 				<label class="item">
 					<button class="wide" ng-click="selectDeadline()">{{quest.deadline || "Deadline" | date }}</button>
 				</label>
-				<div ng-messages="questEditForm.description.$error" class="item form-errors" ng-if="questEditForm.description.$touched">
+				<div ng-messages="questEditForm.description.$error" class="item form-errors">
 					<div ng-message="required">A description is required</div>
 				</div>
 				<label class="item item-input">
