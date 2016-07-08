@@ -1,35 +1,44 @@
 <ion-view view-title="{{action}}">
 	<ion-content>
-		<div class="form list">
-			<label class="item item-input">
-				<input type="text" placeholder="Name" ng-model="quest.name"/>
-			</label>
-			<label class="item item-input item-select">
-				<div class="input-label">
-					Context / Project
+		<form name="questEditForm" novalidate>
+			<div class="form list">
+				<label class="item item-input">
+					<input type="text" name="name" placeholder="Name *" ng-model="quest.name" ng-minlength="3" required/>
+				</label>
+				<div ng-messages="questEditForm.name.$error" class="item form-errors" ng-if="questEditForm.description.$touched">
+					<div ng-message="required">A name is required</div>
+					<div ng-message="minlength">The name must contain at least 3 letters</div>
 				</div>
-				<select ng-model="quest.context">
-					<option ng-repeat="option in contexts" value="{{option.id}}">{{option.name}}</option>
-				</select>
-			</label>
-			<label class="item item-input item-select">
-				<div class="input-label">
-					Status
+				<label class="item item-input item-select">
+					<div class="input-label">
+						Context / Project
+					</div>
+					<select ng-model="quest.context">
+						<option ng-repeat="option in contexts" value="{{option.id}}">{{option.name}}</option>
+					</select>
+				</label>
+				<label class="item item-input item-select">
+					<div class="input-label">
+						Status
+					</div>
+					<select ng-model="quest.status">
+						<option ng-repeat="option in statuses" value="{{option.id}}">{{option.name}}</option>
+					</select>
+				</label>
+				<label class="item">
+					<button class="wide" ng-click="selectDeadline()">{{quest.deadline || "Deadline" | date }}</button>
+				</label>
+				<div ng-messages="questEditForm.description.$error" class="item form-errors" ng-if="questEditForm.description.$touched">
+					<div ng-message="required">A description is required</div>
 				</div>
-				<select ng-model="quest.status">
-					<option ng-repeat="option in statuses" value="{{option.id}}">{{option.name}}</option>
-				</select>
-			</label>
-			<label class="item">
-				<button class="wide" ng-click="selectDeadline()">{{quest.deadline || "Deadline" | date }}</button>
-			</label>
-			<label class="item item-input">
-				<textarea rows="15" ng-model="quest.description" placeholder="Description"></textarea>
-			</label>
-			<div class="item">
-				<button ng-click="save()" class="decorated">Save</button>
-				<button ng-click="cancel()" class="decorated">Cancel</button>
+				<label class="item item-input">
+					<textarea name="description" rows="15" ng-model="quest.description" placeholder="Description *" required></textarea>
+				</label>
+				<div class="item">
+					<button ng-click="save(questEditForm)" class="decorated">Save</button>
+					<button ng-click="cancel()" class="decorated">Cancel</button>
+				</div>
 			</div>
-		</div>
+		</form>
 	</ion-content>
 </ion-view>

@@ -85,10 +85,12 @@ angular.module('journal-material.Quests.controllers', [])
 			ionicDatePicker.openDatePicker(deadline_obj);
 		}
 
-		$scope.save = function(){
-			console.log($scope.quest);
-			$scope.must_confirm = false;
-			$ionicHistory.goBack();
+		$scope.save = function(form){
+			if(form.$valid){
+				console.log($scope.quest);
+				$scope.must_confirm = false;
+				$ionicHistory.goBack();
+			}
 		}
 
 		$scope.cancel = function(){
