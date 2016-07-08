@@ -70,10 +70,10 @@ angular.module('journal-material.services', [])
 [
 	"journal-material.services.UUIDService",
 	function(UUIDService){
+		this.interfaces = ["HasTimestamp", "UUID"];
 		this._new = function(){
 			var uuid = UUIDService.longUuid()
 			return {
-				interfaces: ["HasTimestamp", "UUID"],
 				uuid: uuid,
 				shortUuid: UUIDService.shortUuid(uuid),
 				created_at: (new Date()).toISOString(),
