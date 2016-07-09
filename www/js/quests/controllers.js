@@ -107,7 +107,6 @@ angular.module('journal-material.Quests.controllers', [])
 				QuestService.save($scope.quest)
 					.then(function(){
 						$scope.must_confirm = false;
-						$rootScope.$apply();
 						$ionicHistory.clearCache();
 						$ionicHistory.goBack();
 					})
