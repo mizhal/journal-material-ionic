@@ -32,7 +32,19 @@ angular.module('journal-material.service-localdb', [])
 
 		this.destroy = function(object){
 			return self.Pouch.remove(object);
-		};
+		}
+
+		this.checkDBViews = function(views){
+			for(var i in views){
+				self.save(views[i])
+					.catch(function(error){
+						if(error.name != "conflict")
+						{
+							console.log(error);
+						} // else: conflict means view already exists
+					});
+			}
+		}
 	}
 ])
 

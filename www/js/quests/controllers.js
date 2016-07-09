@@ -21,16 +21,23 @@ angular.module('journal-material.Quests.controllers', [])
 	"journal-material.services.SortCriteriaService",
 	function($scope, QuestService, $q, SortCriteriaService){
 		$scope.sorting = SortCriteriaService.Enum.UPDATED_DESC;
-		
-		QuestService.GetSummarizedQuestLog($scope.sorting).then(function(response){
+		QuestService.getSummarizedQuestLog($scope.sorting).then(function(response){
 			$scope.quest_log = response;
 		});
 	}
 ])
 
-.controller('journal-material.Quests.controllers.FocusCtrl', function($scope){
+.controller('journal-material.Quests.controllers.FocusCtrl', [
+	"$scope",
+	"journal-material.Quests.services.QuestService",
+	function($scope, QuestService) {
+		$scope.focus = []
 
-})
+		QuestService.getByStatus("FOCUS").then(function(quests){
+			$scope.focus = quests;
+		})
+	}
+])
 
 .controller('journal-material.Quests.controllers.ListingCtrl', 
 	[
@@ -39,6 +46,12 @@ angular.module('journal-material.Quests.controllers', [])
 		function($scope, $stateParams, QuestService){
 			var status = $stateParams.status;
 			$scope.title = QuestService.TranslateStatus(status);
+
+			$scope.quests = [];
+
+			QuestService.getByStatus(status).then(function(quests){
+				$scope.quests = quests;
+			});
 		}
 	]
 )
@@ -97,6 +110,7 @@ angular.module('journal-material.Quests.controllers', [])
 						$ionicHistory.goBack();						
 					})
 			}
+			$rootScope.$apply();
 		}
 
 		$scope.cancel = function(){

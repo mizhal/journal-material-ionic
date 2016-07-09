@@ -39,7 +39,9 @@ angular.module('journal-material.Quests.services', [])
 	"journal-material.services.SortCriteriaService",
 	"journal-material.service-localdb.DBService",
 	"journal-material.Quests.services.EnumService",
-	function($q, SortCriteriaService, DBService, EnumService){
+	"journal-material.Quests.services.QuestFactory",
+	"journal-material.Quests.services.QuestServiceInitializer",
+	function($q, SortCriteriaService, DBService, EnumService, QuestFactory, QuestServiceInitializer){
 
 		var self = this;
 
@@ -47,16 +49,24 @@ angular.module('journal-material.Quests.services', [])
 		/** END: PRIVATE **/
 
 		/** PUBLIC **/
-		this.TranslateStatus = function(status){
+		this.TranslateStatus = function(status) {
 			return EnumService.QuestsStatusTranslation[status];
 		}
 
-		this.GetSummarizedQuestLog = function(sort_criteria){
+		this.getSummarizedQuestLog = function(sort_criteria) {
 			return $q.defer().promise;
 		}
 
-		this.GetQuestsForStatus = function(status, sort_criteria){
-			DBService.query("");
+		this.getByStatus = function(status, sort_criteria) {
+			return DBService.queryView("quest_by_status/by_updated", {
+				startkey: [status],
+				endkey: [status, {}, {}],
+				include_docs: true
+			}).then(function(res){
+				return res.rows.map(function(it){
+					return it.doc;
+				});
+			})
 		}
 
 		this.save = function(quest){
@@ -75,49 +85,37 @@ angular.module('journal-material.Quests.services', [])
 	"$q",
 	"journal-material.services.SortCriteriaService",
 	"journal-material.service-localdb.DBService",
-	function($q, SortCriteriaService, DBService){
+	"journal-material.Quests.services.QuestFactory",
+	function($q, SortCriteriaService, DBService, QuestFactory){
 		var self;
 
 		/** DB VIEWS **/
 		this.views = {};
 
-		this.views.quest_by_status_by_updated = {
-			_id: "_design/quest_status_group",
-			filters: {
-				by_status: function(quest, req){
-					return quest.status == req.status; 
-				}.toString()
-			},
+		var name = "quest_by_status" 
+		this.views.quest_by_status = {
+			name: name,
+			_id: "_design/" + name,
 			views: {
 				by_updated: {
-					map: function(quest){ 
-						return emit([quest.status, quest.updated_at], quest); 
-					}.toString()
+					map: function(quest, req){ 
+						if(quest.type == "$$1")
+							return emit([quest.status, quest.updated_at], quest); 
+					}.toString().replace("$$1", QuestFactory.type)
 				},
 				by_created: {
-					map: function(quest){ 
-						return emit([quest.status, quest.created_at], quest); 
-					}.toString()	
-				}
-			}
-		};
-
-		this.views.quest_status_by_created = {
-			_id: "_design/quest_status_by_updated",
-			filters: {
-				by_status: function(quest, req){
-					return quest.status == req.status; 
-				}.toString()
-			},
-			views: {
-				by_status: {
-					map: function(quest){ 
-						return emit([quest.status, quest.created_at], quest); 
-					}.toString()
+					map: function(quest, req){ 
+						if(quest.type == "$$1")
+							return emit([quest.status, quest.created_at], quest); 
+					}.toString().replace("$$1", QuestFactory.type)	
 				}
 			}
 		};
 		/** END: DB VIEWS **/
+
+		this.init = function(){
+			DBService.checkDBViews(this.views);
+		}
 	}
 ])
 
@@ -171,6 +169,14 @@ angular.module('journal-material.Quests.services', [])
 
 			return proto;
 		}
+	}
+])
+
+.run([
+	"journal-material.Quests.services.QuestServiceInitializer",
+	function(QuestServiceInitializer){
+
+		QuestServiceInitializer.init();
 	}
 ])
 ;
