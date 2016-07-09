@@ -51,8 +51,9 @@ angular.module('journal-material.Quests.controllers', [])
 	"$ionicPopup",
 	"$state",
 	"journal-material.Quests.services.QuestFactory",
+	"journal-material.Quests.services.QuestService",
 	"ionicDatePicker",
-	function($scope, $rootScope, $stateParams, $ionicHistory, $ionicPopup, $state, QuestFactory, ionicDatePicker){
+	function($scope, $rootScope, $stateParams, $ionicHistory, $ionicPopup, $state, QuestFactory, QuestService, ionicDatePicker){
 		$scope.id = $stateParams.id;
 		$scope.must_confirm = true;
 		if($scope.id) {
@@ -87,9 +88,11 @@ angular.module('journal-material.Quests.controllers', [])
 
 		$scope.save = function(form){
 			if(form.$valid){
-				console.log($scope.quest);
-				$scope.must_confirm = false;
-				$ionicHistory.goBack();
+				QuestService.save($scope.quest)
+					.then(function(){
+						$scope.must_confirm = false;
+						$ionicHistory.goBack();						
+					})
 			}
 		}
 
