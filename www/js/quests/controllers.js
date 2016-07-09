@@ -88,7 +88,7 @@ angular.module('journal-material.Quests.controllers', [])
 		$scope.statuses = [
 			{id: "OPEN", name: "Open"},
 			{id: "FOCUS", name: "Focus"},
-			{id: "WAITING", name: "Waiting"}
+			{id: "BLOCKED", name: "Waiting"}
 		]
 
 		var deadline_obj = {
@@ -107,10 +107,11 @@ angular.module('journal-material.Quests.controllers', [])
 				QuestService.save($scope.quest)
 					.then(function(){
 						$scope.must_confirm = false;
-						$ionicHistory.goBack();						
+						$rootScope.$apply();
+						$ionicHistory.clearCache();
+						$ionicHistory.goBack();
 					})
 			}
-			$rootScope.$apply();
 		}
 
 		$scope.cancel = function(){
