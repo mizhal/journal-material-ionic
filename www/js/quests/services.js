@@ -58,6 +58,14 @@ angular.module('journal-material.Quests.services', [])
 		this.GetQuestsForStatus = function(status, sort_criteria){
 			DBService.query("");
 		}
+
+		this.save = function(quest){
+			return DBService.save(quest);
+		}
+
+		this.get = function(id){
+			return DBService.get(id);
+		}
 		/** END: PUBLIC **/
 	}
 ])
@@ -126,8 +134,8 @@ angular.module('journal-material.Quests.services', [])
 			var proto = HasTimestampFactory._new();
 
 			Object.assign(proto, {
+				_id: this.type + "-" + proto.uuid,
 				type: self.type,
-				interfaces: self.interfaces,
 				name: name,
 				description: desc,
 				tasks: [],
