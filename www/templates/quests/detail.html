@@ -1,5 +1,29 @@
-<ion-view view-title="Detail">
+<ion-view view-title="{{quest.name}}">
 	<ion-content>
-		<h1>Detail</h1>
+		<article class="quest">
+			<header>
+				<h1>{{quest.name}}</h1>
+			</header>
+			<section class="description">
+				<header>Description:</header>
+				<div ng-bind-html="{{quest.description}}"></div>
+			</section>
+			<section class="track">
+				<header>Track:</header>
+				<ol>
+					<li class="tasks" ng-repeat="task in quests.tasks">
+						<p>{{task.name}}</p>
+					</li>
+				</ol>
+			</section>
+			<section class="journal">
+				<header>Journal:</header>
+				<ol>
+					<li class="journal-entry" ng-repeat="entry in quest.journal">
+						<div ng-bind-html="entry.text"></div>
+					</li>
+				</ol>
+			</section>
+		</article>
 	</ion-content>
 </ion-view>

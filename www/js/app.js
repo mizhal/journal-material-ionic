@@ -121,7 +121,7 @@ angular.module('journal-material', [
     }
   }) 
 
-  .state('app.quest.detail', {
+  .state('app.quests.detail', {
     url: '/show/{id}',
     views: {
       content: {

@@ -128,10 +128,21 @@ angular.module('journal-material.Quests.controllers', [])
 ])
 
 .controller('journal-material.Quests.controllers.DetailCtrl',
+[
+	"$scope",
+	"$stateParams",
+	"$ionicHistory",
 	function($scope, $stateParams){
-
+		$scope.id = $stateParams.id;
+		if($scope.id) {
+			QuestService.get($scope.id).then(function(quest){
+				$scope.quest = quest;
+			})
+		} else {
+			$ionicHistory.goBack();
+		}
 	}
-)
+])
 
 .controller('journal-material.Quests.controllers.TodoListCtrl',
 	function($scope, $stateParams){
