@@ -152,6 +152,7 @@ angular.module('journal-material.Quests.controllers', [])
 	"journal-material.Quests.services.EnumService",
 	function($scope, $stateParams, $ionicHistory, $ionicPopup, QuestService, EnumService){
 		$scope.id = $stateParams.id;
+		$scope.title = "Quest";
 		if($scope.id) {
 			QuestService.get($scope.id).then(function(quest){
 				$scope.quest = quest;
