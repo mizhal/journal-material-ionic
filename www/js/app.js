@@ -126,7 +126,7 @@ angular.module('journal-material', [
     views: {
       content: {
         templateUrl: 'templates/quests/detail.html',
-        controller: 'journal-material.Quests.DetailCtrl'
+        controller: 'journal-material.Quests.controllers.DetailCtrl'
       }
     }
   })

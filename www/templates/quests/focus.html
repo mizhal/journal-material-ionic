@@ -8,7 +8,7 @@
 		<div class="separator theme"></div>
 		<section class="quests">
 			<div class="quest item" ng-repeat="q in focus">
-				<h3><i class="icon ion-ios-clock"></i> {{q.name}} <a ui-sref="app.quests.edit({id:q._id})"><i class="icon right ion-ios-play"></i></a></h3>
+				<h3><i class="icon ion-ios-clock"></i> {{q.name}} <a ui-sref="app.quests.detail({id:q._id})"><i class="icon right ion-ios-play"></i></a></h3>
 			</div>
 		</section>
 	</ion-content>

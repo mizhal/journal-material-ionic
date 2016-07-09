@@ -107,8 +107,9 @@ angular.module('journal-material.Quests.controllers', [])
 				QuestService.save($scope.quest)
 					.then(function(){
 						$scope.must_confirm = false;
-						$ionicHistory.clearCache();
-						$ionicHistory.goBack();
+						$ionicHistory.clearCache().then(function(){
+							return $ionicHistory.goBack();	
+						})
 					})
 			}
 		}
@@ -146,7 +147,10 @@ angular.module('journal-material.Quests.controllers', [])
 	"$scope",
 	"$stateParams",
 	"$ionicHistory",
-	function($scope, $stateParams){
+	"$ionicPopup",
+	"journal-material.Quests.services.QuestService",
+	"journal-material.Quests.services.EnumService",
+	function($scope, $stateParams, $ionicHistory, $ionicPopup, QuestService, EnumService){
 		$scope.id = $stateParams.id;
 		if($scope.id) {
 			QuestService.get($scope.id).then(function(quest){
@@ -155,6 +159,66 @@ angular.module('journal-material.Quests.controllers', [])
 		} else {
 			$ionicHistory.goBack();
 		}
+
+		/** PROVIDERS **/
+		$scope.state_transitions = QuestService;
+		/** END:PROVIDERS **/
+
+		/** METHODS **/
+		$scope.addTask = function() {
+			$ionicPopup.prompt({
+				title: "New task",
+				template: "Write a new task",
+				inputType: "text",
+				inputPlaceholder: "task"
+			}).then(function(res){
+				var task = QuestService.newTask(res);
+				$scope.quest.tasks.push(task);
+			})
+		}
+
+		$scope.setFocus = function(quest){
+			QuestService.isFocusFull().then(function(is_full){
+				if(is_full){
+					$ionicPopup.confirm({
+						title: "Focus crowded",
+						subtitle: "There are so many tasks in focus, the journal will put the lastest updated to OPEN state."
+					}).then(function(ok_to_proceed){
+						if(ok_to_proceed) {
+							QuestService.removeLatestFromFocus().then(function(){
+								QuestService.setFocus(quest).then(function(){
+									return $ionicHistory.clearCache();
+								})
+							})
+						}
+					})
+				} else 
+					return QuestService.setFocus(quest).then(function(){
+						return $ionicHistory.clearCache();
+					});
+			})
+		}
+
+		$scope.setOpen = function(quest){
+
+		}
+
+		$scope.setBlock = function(quest){
+
+		}
+
+		$scope.setDone = function(quest){
+
+		}
+
+		$scope.setFail = function(quest){
+
+		}
+
+		$scope.setScheduled = function(quest){
+
+		}
+		/** END: METHODS **/
 	}
 ])
 

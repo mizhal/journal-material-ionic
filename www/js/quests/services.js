@@ -41,7 +41,8 @@ angular.module('journal-material.Quests.services', [])
 	"journal-material.Quests.services.EnumService",
 	"journal-material.Quests.services.QuestFactory",
 	"journal-material.Quests.services.QuestServiceInitializer",
-	function($q, SortCriteriaService, DBService, EnumService, QuestFactory, QuestServiceInitializer){
+	"journal-material.Quests.services.TaskFactory",
+	function($q, SortCriteriaService, DBService, EnumService, QuestFactory, QuestServiceInitializer, TaskFactory){
 
 		var self = this;
 
@@ -69,6 +70,16 @@ angular.module('journal-material.Quests.services', [])
 			})
 		}
 
+		this.countByStatus = function(status) {
+			return DBService.queryView("quest_by_status/by_updated", {
+				startkey: [status],
+				endkey: [status, {}, {}],
+				include_docs: false
+			}).then(function(res){
+				return res.rows.length;
+			})
+		}
+
 		this.save = function(quest){
 			return DBService.save(quest);
 		}
@@ -76,6 +87,91 @@ angular.module('journal-material.Quests.services', [])
 		this.get = function(id){
 			return DBService.get(id);
 		}
+
+		this.newTask = function(name){
+			return TaskFactory._new(name);
+		}
+		/** next statuses **/
+		this.canBlock = function(quest){
+			var allowed = [
+				EnumService.QuestStatus.FOCUS,
+				EnumService.QuestStatus.OPEN
+			]
+			return allowed.indexOf(quest.status) != -1;
+		}
+
+		this.canBacklog = function(quest){
+			var allowed = [
+				EnumService.QuestStatus.FOCUS,
+				EnumService.QuestStatus.FAILED,
+				EnumService.QuestStatus.CANCELLED,
+				EnumService.QuestStatus.DONE,
+				EnumService.QuestStatus.SCHEDULED
+			]
+			return allowed.indexOf(quest.status) != -1;
+		}
+
+		this.canDone = function(quest) {
+			var allowed = [
+				EnumService.QuestStatus.FOCUS,
+				EnumService.QuestStatus.OPEN
+			]
+			return allowed.indexOf(quest.status) != -1;
+		}
+
+		this.canFail = function(quest) {
+			var allowed = [
+				EnumService.QuestStatus.FOCUS,
+				EnumService.QuestStatus.OPEN
+			]
+			return allowed.indexOf(quest.status) != -1;
+		}
+
+		this.canSchedule = function(quest) {
+			var allowed = [
+				EnumService.QuestStatus.FOCUS,
+				EnumService.QuestStatus.OPEN
+			]
+			return allowed.indexOf(quest.status) != -1;
+		}
+
+		this.canFocus = function(quest) {
+			var allowed = [
+				EnumService.QuestStatus.OPEN,
+				EnumService.QuestStatus.BLOCKED,
+				EnumService.QuestStatus.SCHEDULED,
+				EnumService.QuestStatus.DONE
+			]
+			return allowed.indexOf(quest.status) != -1;
+		}
+		/** END: next statuses **/
+
+		/** Status transition **/
+		this.isFocusFull = function(){
+			return self.countByStatus(EnumService.QuestStatus.FOCUS).then(function(count){
+				return count > 4;
+			})
+		}
+
+		this.setFocus = function(quest) {
+			quest.status = EnumService.QuestStatus.FOCUS;
+			return self.save(quest);
+		}
+
+		this.removeLatestFromFocus = function(){
+			return self.getByStatus(EnumService.QuestStatus.FOCUS)
+				.then(function(quests){
+					var drop = quests[quests.length - 1];
+					return self.setOpen(drop);
+				})
+		}
+
+		this.setOpen = function(quest) {
+			quest.status = EnumService.QuestStatus.OPEN;
+			return self.save(quest);
+		}
+		/** END: Status transition **/
+
 		/** END: PUBLIC **/
 	}
 ])
