@@ -58,6 +58,9 @@ angular.module('journal-material.Quests.controllers', [])
 		$scope.must_confirm = true;
 		if($scope.id) {
 			$scope.action = "Edit Quest";
+			QuestService.get($scope.id).then(function(quest){
+				$scope.quest = quest;
+			})
 		} else {
 			$scope.action = "New Quest";
 			$scope.quest = QuestFactory._new();
