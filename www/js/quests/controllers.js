@@ -182,7 +182,7 @@ angular.module('journal-material.Quests.controllers', [])
 				if(is_full){
 					$ionicPopup.confirm({
 						title: "Focus crowded",
-						subtitle: "There are so many tasks in focus, the journal will put the lastest updated to OPEN state."
+						subTitle: "There are so many tasks in focus, the journal will put the lastest updated to OPEN state."
 					}).then(function(ok_to_proceed){
 						if(ok_to_proceed) {
 							QuestService.removeLatestFromFocus().then(function(){

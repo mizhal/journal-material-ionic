@@ -149,7 +149,7 @@ angular.module('journal-material.Quests.services', [])
 		/** Status transition **/
 		this.isFocusFull = function(){
 			return self.countByStatus(EnumService.QuestStatus.FOCUS).then(function(count){
-				return count > 4;
+				return count >= 4;
 			})
 		}
 
