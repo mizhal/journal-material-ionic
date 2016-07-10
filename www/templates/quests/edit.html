@@ -25,7 +25,7 @@
 						<option ng-repeat="option in statuses" value="{{option.id}}">{{option.name}}</option>
 					</select>
 				</label>
-				<label class="item item-input">
+				<label class="item item-input" ng-if="id">
 					<div class="input-label">
 						Status
 					</div>
