@@ -7,22 +7,34 @@
 			<button class="button button-energized button-fab button-fab-bottom-right button-right-second" ui-sref="app.quests.edit"><i class="icon ion-plus"></i></button>
 			<button class="button button-energized button-fab button-fab-bottom-right"><i class="icon ion-stats-bars"></i></button>
 		</div>
-		<section class="quests">
+		<section class="quests" ng-if="quest_log.n_blocked > 0">
 			<div class="separator1"></div>
-			<h3><i class="icon ion-ios-clock"></i> Waiting <a ui-sref="app.quests.listings({status:'BLOCKED'})"><i class="icon right ion-ios-play"></i></a></h3>
+			<h3><i class="icon ion-ios-clock"></i> Waiting <span>({{quest_log.n_blocked}})</span> <a ui-sref="app.quests.listings({status:'BLOCKED'})"><i class="icon right ion-ios-play"></i></a></h3>
 			<div class="separator1"></div>
+			<div class="quest item" ng-repeat="q in quest_log.blocked">
+				<h4><i class="icon ion-ios-clock"></i>  {{q.name}} <a ui-sref="app.quests.detail({id:q._id})"><i class="icon right ion-ios-play"></i></a></h4>
+			</div>
 		</section>
 
 		<section class="quests">
 			<div class="separator1"></div>
 			<h3><i class="icon ion-eye"></i> Focus <a ui-sref="app.quests.focus"><i class="icon right ion-ios-play"></i></a></i></h3>
 			<div class="separator1"></div>
+			<div class="quest item" ng-repeat="q in quest_log.focus">
+				<h4><i class="icon ion-play"></i> {{q.name}} <a ui-sref="app.quests.detail({id:q._id})"><i class="icon right ion-ios-play"></i></a></h4>
+			</div>
+			<div class="quest item" ng-if="quest_log.focus.length == 0">
+				<h4> No quests </h4>
+			</div>
 		</section>
 
-		<section class="quests">
+		<section class="quests" ng-if="quest_log.n_open > 0">
 			<div class="separator1"></div>
-			<h3><i class="icon ion-ios-pie"></i> Open <a ui-sref="app.quests.listings({status:'OPEN'})"><i class="icon right ion-ios-play"></i></a></h3>
+			<h3><i class="icon ion-ios-pie"></i> Open <span>({{quest_log.n_open}})</span> <a ui-sref="app.quests.listings({status:'OPEN'})"><i class="icon right ion-ios-play"></i></a></h3>
 			<div class="separator1"></div>
+			<div class="quest item" ng-repeat="q in quest_log.open">
+				<h4><i class="icon ion-ios-pie"></i> {{q.name}} <a ui-sref="app.quests.detail({id:q._id})"><i class="icon right ion-ios-play"></i></a></h4>
+			</div>
 		</section>
 
 		<ion-list>

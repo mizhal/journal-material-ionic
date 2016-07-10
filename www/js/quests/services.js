@@ -55,14 +55,31 @@ angular.module('journal-material.Quests.services', [])
 		}
 
 		this.getSummarizedQuestLog = function(sort_criteria) {
-			return $q.defer().promise;
+			return Promise.all([
+				self.getByStatus(EnumService.QuestStatus.FOCUS),
+				self.getByStatus(EnumService.QuestStatus.BLOCKED, 4),
+				self.countByStatus(EnumService.QuestStatus.BLOCKED),
+				self.getByStatus(EnumService.QuestStatus.OPEN, 4),
+				self.countByStatus(EnumService.QuestStatus.OPEN)	
+			]).spread(function(focus, blocked, n_blocked, open, n_open){
+				return {
+					focus: focus,
+					blocked: blocked,
+					n_blocked: n_blocked,
+					more_blocked: n_blocked > 4,
+					open: open,
+					n_open: n_open,
+					more_open: n_open > 4
+				}
+			})
 		}
 
-		this.getByStatus = function(status, sort_criteria) {
+		this.getByStatus = function(status, limit, sort_criteria) {
 			return DBService.queryView("quest_by_status/by_updated", {
 				startkey: [status],
 				endkey: [status, {}, {}],
-				include_docs: true
+				include_docs: true,
+				limit: limit,
 			}).then(function(res){
 				return res.rows.map(function(it){
 					return it.doc;

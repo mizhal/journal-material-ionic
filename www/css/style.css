@@ -131,8 +131,8 @@
 .quest-log-overview h3, .quest-log-overview .item h3 {
 	margin: 0;
 	font-size: 16pt;
-	background-color: white;
-	padding: 0.3em 1em;
+	background-color: #eee;
+	padding: 0.3em 0.3em;
 	min-width: 100%;
 }
 
@@ -147,6 +147,14 @@
 
 .quest-log-overview h3 i.icon {
 	margin-right: 0.2em;
+}
+
+.quest-log-overview .quest.item {
+	padding: 5px 5px 5px 10px;
+}
+
+.quest-log-overview .quest.item h4 {
+	font-size: 1.2em;
 }
 /*** END: QUEST LOG OVERVIEW **/
 
