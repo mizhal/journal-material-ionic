@@ -21,16 +21,23 @@ angular.module('journal-material.Quests.controllers', [])
 	"journal-material.services.SortCriteriaService",
 	function($scope, QuestService, $q, SortCriteriaService){
 		$scope.sorting = SortCriteriaService.Enum.UPDATED_DESC;
-		
-		QuestService.GetSummarizedQuestLog($scope.sorting).then(function(response){
+		QuestService.getSummarizedQuestLog($scope.sorting).then(function(response){
 			$scope.quest_log = response;
 		});
 	}
 ])
 
-.controller('journal-material.Quests.controllers.FocusCtrl', function($scope){
+.controller('journal-material.Quests.controllers.FocusCtrl', [
+	"$scope",
+	"journal-material.Quests.services.QuestService",
+	function($scope, QuestService) {
+		$scope.focus = []
 
-})
+		QuestService.getByStatus("FOCUS").then(function(quests){
+			$scope.focus = quests;
+		})
+	}
+])
 
 .controller('journal-material.Quests.controllers.ListingCtrl', 
 	[
@@ -39,6 +46,12 @@ angular.module('journal-material.Quests.controllers', [])
 		function($scope, $stateParams, QuestService){
 			var status = $stateParams.status;
 			$scope.title = QuestService.TranslateStatus(status);
+
+			$scope.quests = [];
+
+			QuestService.getByStatus(status).then(function(quests){
+				$scope.quests = quests;
+			});
 		}
 	]
 )
@@ -75,7 +88,7 @@ angular.module('journal-material.Quests.controllers', [])
 		$scope.statuses = [
 			{id: "OPEN", name: "Open"},
 			{id: "FOCUS", name: "Focus"},
-			{id: "WAITING", name: "Waiting"}
+			{id: "BLOCKED", name: "Waiting"}
 		]
 
 		var deadline_obj = {
@@ -94,7 +107,9 @@ angular.module('journal-material.Quests.controllers', [])
 				QuestService.save($scope.quest)
 					.then(function(){
 						$scope.must_confirm = false;
-						$ionicHistory.goBack();						
+						$ionicHistory.clearCache().then(function(){
+							return $ionicHistory.goBack();	
+						})
 					})
 			}
 		}
@@ -128,10 +143,85 @@ angular.module('journal-material.Quests.controllers', [])
 ])
 
 .controller('journal-material.Quests.controllers.DetailCtrl',
-	function($scope, $stateParams){
+[
+	"$scope",
+	"$stateParams",
+	"$ionicHistory",
+	"$ionicPopup",
+	"journal-material.Quests.services.QuestService",
+	"journal-material.Quests.services.EnumService",
+	function($scope, $stateParams, $ionicHistory, $ionicPopup, QuestService, EnumService){
+		$scope.id = $stateParams.id;
+		$scope.title = "Quest";
+		if($scope.id) {
+			QuestService.get($scope.id).then(function(quest){
+				$scope.quest = quest;
+			})
+		} else {
+			$ionicHistory.goBack();
+		}
 
+		/** PROVIDERS **/
+		$scope.state_transitions = QuestService;
+		/** END:PROVIDERS **/
+
+		/** METHODS **/
+		$scope.addTask = function() {
+			$ionicPopup.prompt({
+				title: "New task",
+				template: "Write a new task",
+				inputType: "text",
+				inputPlaceholder: "task"
+			}).then(function(res){
+				var task = QuestService.newTask(res);
+				$scope.quest.tasks.push(task);
+			})
+		}
+
+		$scope.setFocus = function(quest){
+			QuestService.isFocusFull().then(function(is_full){
+				if(is_full){
+					$ionicPopup.confirm({
+						title: "Focus crowded",
+						subTitle: "There are so many tasks in focus, the journal will put the lastest updated to OPEN state."
+					}).then(function(ok_to_proceed){
+						if(ok_to_proceed) {
+							QuestService.removeLatestFromFocus().then(function(){
+								QuestService.setFocus(quest).then(function(){
+									return $ionicHistory.clearCache();
+								})
+							})
+						}
+					})
+				} else 
+					return QuestService.setFocus(quest).then(function(){
+						return $ionicHistory.clearCache();
+					});
+			})
+		}
+
+		$scope.setOpen = function(quest){
+
+		}
+
+		$scope.setBlock = function(quest){
+
+		}
+
+		$scope.setDone = function(quest){
+
+		}
+
+		$scope.setFail = function(quest){
+
+		}
+
+		$scope.setScheduled = function(quest){
+
+		}
+		/** END: METHODS **/
 	}
-)
+])
 
 .controller('journal-material.Quests.controllers.TodoListCtrl',
 	function($scope, $stateParams){

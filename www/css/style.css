@@ -19,6 +19,10 @@
 	right: 88px!important;
 }
 
+.button-right-third {
+	right: 160px!important;
+}
+
 .separator1 {
 	background-image: url("../img/separator1.png");
 	background-size: 100%;
@@ -240,3 +244,22 @@
 	color: #ff0000;
 }
 /** END: FORMS **/
+
+/** QUEST DETAIL **/
+.assassins-creed-titles.quest h2 {
+	font-size: 1.5em;
+}
+
+article.quest section header {
+
+}
+
+article.quest .actions-strip .icon {
+	font-size: 24pt;
+	margin: 0 0.6em;
+}
+
+article.quest .actions-strip .icon:first-child {
+	margin-left: 0;
+}
+/** END: QUEST DETAIL **/

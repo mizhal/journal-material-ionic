@@ -1,5 +1,49 @@
-<ion-view view-title="Detail">
+<ion-view view-title="{{title}}">
 	<ion-content>
-		<h1>Detail</h1>
+		<article class="quest">
+			<div class="hero quest-log-listings">
+				<div class="content assassins-creed-titles quest">
+					<h2>{{quest.name}}</h2>
+				</div>
+				<button class="button button-energized button-fab button-fab-bottom-right button-right-third" ui-sref="app.quests.edit({id: quest._id})"><i class="icon ion-edit"></i></button>
+				<button class="button button-energized button-fab button-fab-bottom-right button-right-second"
+					ng-click="addTask()">
+					<i class="icon ion-checkmark-circled"></i>
+				</button>
+				<button class="button button-energized button-fab button-fab-bottom-right"><i class="icon ion-chatboxes"></i></button>
+			</div>
+			<div class="list">
+				<div class="separator1"></div>
+				<div class="actions-strip item">
+					<i class="icon ion-play" id="to-focus" ng-if="quest && state_transitions.canFocus(quest)" ng-click="setFocus(quest)"></i>
+					<i class="icon ion-stop" id="to-backlog" ng-if="quest && state_transitions.canBacklog(quest)" ng-click="setOpen(quest)"></i>
+					<i class="icon ion-pause" id="to-blocked" ng-if="quest && state_transitions.canBlock(quest)" ng-click="setBlock(quest)"></i>
+					<i class="icon ion-checkmark" id="to-done" ng-if="quest && state_transitions.canDone(quest)" ng-click="setDone(quest)"></i>
+					<i class="icon ion-close" id="to-failed" ng-if="quest && state_transitions.canFail(quest)" ng-click="setFail(quest)"></i>
+					<i class="icon ion-calendar" id="to-scheduled" ng-if="quest && state_transitions.canSchedule(quest)" ng-click="setScheduled(quest)"></i>
+				</div>
+				<div class="separator1"></div>
+				<section class="description item">
+					<header>Description:</header>
+					<div ng-bind-html="quest.description"></div>
+				</section>
+				<section class="track item">
+					<header>Track:</header>
+					<ol>
+						<li class="tasks" ng-repeat="task in quest.tasks">
+							<p>{{task.name}}</p>
+						</li>
+					</ol>
+				</section>
+				<section class="journal item">
+					<header>Journal:</header>
+					<ol>
+						<li class="journal-entry" ng-repeat="entry in quest.journal">
+							<div ng-bind-html="entry.text"></div>
+						</li>
+					</ol>
+				</section>
+			</list>
+		</article>
 	</ion-content>
 </ion-view>

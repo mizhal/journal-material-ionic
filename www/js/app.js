@@ -121,12 +121,12 @@ angular.module('journal-material', [
     }
   }) 
 
-  .state('app.quest.detail', {
+  .state('app.quests.detail', {
     url: '/show/{id}',
     views: {
       content: {
         templateUrl: 'templates/quests/detail.html',
-        controller: 'journal-material.Quests.DetailCtrl'
+        controller: 'journal-material.Quests.controllers.DetailCtrl'
       }
     }
   })

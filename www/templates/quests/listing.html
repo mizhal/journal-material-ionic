@@ -4,8 +4,13 @@
 			<div class="content assassins-creed-titles">
 				<h2>{{title}}</h2>
 			</div>
+			<button class="button button-fab button-fab-bottom-right"></button>
 		</div>
-		<button class="button button-fab button-fab-bottom-right"></button>
-		<div class="separator theme"></div>
+		<div class="separator1 theme"></div>
+		<section class="quests">
+			<div class="quest item" ng-repeat="q in quests">
+				<h3><i class="icon ion-ios-clock"></i> {{q.name}} <a ui-sref="app.quests.detail({id:q._id})"><i class="icon right ion-ios-play"></i></a></h3>
+			</div>
+		</section>
 	</ion-content>
 </ion-view>
