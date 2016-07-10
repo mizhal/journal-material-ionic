@@ -17,13 +17,19 @@
 						<option ng-repeat="option in contexts" value="{{option.id}}">{{option.name}}</option>
 					</select>
 				</label>
-				<label class="item item-input item-select">
+				<label class="item item-input item-select" ng-if="!id">
 					<div class="input-label">
 						Status
 					</div>
 					<select ng-model="quest.status">
 						<option ng-repeat="option in statuses" value="{{option.id}}">{{option.name}}</option>
 					</select>
+				</label>
+				<label class="item item-input">
+					<div class="input-label">
+						Status
+					</div>
+					<span>{{quest.status}}</span>
 				</label>
 				<label class="item">
 					<button class="wide" ng-click="selectDeadline()">{{quest.deadline || "Deadline" | date }}</button>
