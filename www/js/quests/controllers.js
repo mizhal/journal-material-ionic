@@ -201,11 +201,22 @@ angular.module('journal-material.Quests.controllers', [])
 		}
 
 		$scope.setOpen = function(quest){
-
+			QuestService.setOpen(quest).then(function(){return $ionicHistory.clearCache(); })
 		}
 
 		$scope.setBlock = function(quest){
-
+			$ionicPopup.prompt({
+				title: "Block reason",
+				template: "Why is this task blocked?",
+				inputType: "text",
+				inputPlaceholder: "reason"
+			}).then(function(ok_to_proceed){
+				if(ok_to_proceed) {
+					QuestService.setBlocked(quest).then(function(){
+						return $ionicHistory.clearCache();
+					})
+				}
+			})
 		}
 
 		$scope.setDone = function(quest){

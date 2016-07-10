@@ -170,6 +170,11 @@ angular.module('journal-material.Quests.services', [])
 			quest.status = EnumService.QuestStatus.OPEN;
 			return self.save(quest);
 		}
+
+		this.setBlocked = function(quest) {
+			quest.status = EnumService.QuestStatus.BLOCKED;
+			return self.save(quest);
+		}
 		/** END: Status transition **/
 
 		/** END: PUBLIC **/
@@ -236,7 +241,9 @@ angular.module('journal-material.Quests.services', [])
 				deadline: null,
 				status: EnumService.QuestStatus.OPEN,
 				context: null,
-				sections: []
+				sections: [],
+				scheduled_to: null,
+				blocked_reason: null
 			});
 
 			return proto;
