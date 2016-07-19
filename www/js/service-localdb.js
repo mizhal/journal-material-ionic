@@ -4,8 +4,14 @@ angular.module('journal-material.service-localdb', [])
 [
 	function(){
 		var self = this;
-
-		this.dbname = "test";
+		
+		this.Pouch = null;
+		this.dbname = null;
+		this.connect = function(dbname){
+			self.dbname = dbname;
+			self.Pouch = new PouchDB(self.dbname)
+			return self.recreateViews();
+		}
 
 		/** SORTING PROTOCOL **/
 		this.sort_criteria = {
@@ -88,17 +94,42 @@ angular.module('journal-material.service-localdb', [])
 				)
 		}
 
+		/** VIEW MANAGEMENT **/
+		var registered_views = {};
+		function SaveView(view){
+			registered_views[view._id] = view;
+		}
+		function RegisteredViews(){
+			return registered_views;
+		}
+
 		this.checkDBViews = function(views){
-			for(var i in views){
-				self.save(views[i])
+			for(var i in views)
+				SaveView(views[i]);
+			self.recreateViews();
+		}
+
+		this.recreateViews = function(){
+			if(!self.Pouch)
+				return;
+
+			var views = RegisteredViews();
+			var promises = []
+			for(var i in views) {
+				var promise = self.save(views[i])
 					.catch(function(error){
 						if(error.name != "conflict")
 						{
 							console.log(error);
 						} // else: conflict means view already exists
-					});
+					})
+					;
+				promises.push(promise);
 			}
+
+			return Promise.all(promises);
 		}
+		/** END: VIEW MANAGEMENT **/
 	}
 ])
 ;
