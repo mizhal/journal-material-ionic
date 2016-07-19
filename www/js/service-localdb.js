@@ -102,6 +102,36 @@ angular.module('journal-material.service-localdb', [])
 				)
 		}
 
+		this.sync = function(url, remote_options) {
+
+			remote_options = remote_options || {};
+
+			var remote = new PouchDB(url, remote_options);
+
+			var action = null
+			if(remote_options.replicate_to) {
+				action = this.Pouch.replicate.to;
+			} else if(remote_options.replicate_from) {
+				action = this.Pouch.replicate.from;
+			} else {
+				action = this.Pouch.sync;
+			}
+
+			return new Promise(function(resolve, reject) {
+
+				action(remote, {retry: true})
+				.on("complete", function(){
+					resolve();
+				})
+				.on("error", function(error){
+					reject(error);
+				})
+				;
+
+			})
+			;
+		}
+
 		/** VIEW MANAGEMENT **/
 		var registered_views = {};
 		function SaveView(view){

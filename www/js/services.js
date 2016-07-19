@@ -83,4 +83,34 @@ angular.module('journal-material.services', [])
 	}
 ])
 
+.service("journal-material.services.SyncableNodeFactory", [
+	"journal-material.services.HasTimestampFactory",
+	function(HasTimestampFactory){
+		var self = this;
+		this.type = "SyncableNode";
+		
+		this._new = function(name){
+			var proto = HasTimestampFactory._new();
+
+			// fields
+			proto.type = self.type;
+			proto._id = self.type + proto.uuid;
+			proto.name = name;
+			proto.crypted_credentials = null;
+			proto.url = null;
+			proto.use_credentials = false;
+			proto.protocol = "http";
+			proto.server_path = null;
+			proto.is_live = false;
+			proto.last_time_sinced = null;
+			proto.last_time_failed_msg = null;
+			proto.sync_log = [];
+			proto.is_locked = false;
+			// END: fields
+
+			return proto;
+		}
+	}
+])
+
 ;
