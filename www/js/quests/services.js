@@ -42,12 +42,11 @@ angular.module('journal-material.Quests.services', [])
 	"journal-material.Quests.services.QuestFactory",
 	"journal-material.Quests.services.QuestServiceInitializer",
 	"journal-material.Quests.services.TaskFactory",
-	function($q, SortCriteriaService, DBService, EnumService, QuestFactory, QuestServiceInitializer, TaskFactory){
+	"journal-material.Quests.services.QuestStatusChangeFactory",
+	function($q, SortCriteriaService, DBService, EnumService, QuestFactory, QuestServiceInitializer, 
+		TaskFactory, QuestStatusChangeFactory){
 
 		var self = this;
-
-		/** PRIVATE **/
-		/** END: PRIVATE **/
 
 		/** PUBLIC **/
 		this.TranslateStatus = function(status) {
@@ -171,6 +170,7 @@ angular.module('journal-material.Quests.services', [])
 		}
 
 		this.setFocus = function(quest) {
+			self.registerStatusChange(quest, EnumService.QuestStatus.FOCUS);
 			quest.status = EnumService.QuestStatus.FOCUS;
 			return self.save(quest);
 		}
@@ -184,17 +184,27 @@ angular.module('journal-material.Quests.services', [])
 		}
 
 		this.setOpen = function(quest) {
+			self.registerStatusChange(quest, EnumService.QuestStatus.OPEN);
 			quest.status = EnumService.QuestStatus.OPEN;
 			return self.save(quest);
 		}
 
-		this.setBlocked = function(quest) {
+		this.setBlocked = function(quest, block_reason) {
+			self.registerStatusChange(quest, EnumService.QuestStatus.BLOCKED, block_reason);
+			quest.block_reason = block_reason;
 			quest.status = EnumService.QuestStatus.BLOCKED;
 			return self.save(quest);
 		}
 		/** END: Status transition **/
 
 		/** END: PUBLIC **/
+
+		/** PRIVATE **/
+		this.registerStatusChange = function(quest, new_status, message) {
+			var change = QuestStatusChangeFactory._new(quest.status, new_status, message);
+			quest.status_changelog.push(change);
+		}
+		/** END: PRIVATE **/
 	}
 ])
 
@@ -260,7 +270,8 @@ angular.module('journal-material.Quests.services', [])
 				context: null,
 				sections: [],
 				scheduled_to: null,
-				blocked_reason: null
+				blocked_reason: null,
+				status_changelog: []
 			});
 
 			return proto;
@@ -288,6 +299,27 @@ angular.module('journal-material.Quests.services', [])
 			});
 
 			return proto;
+		}
+	}
+])
+
+.service("journal-material.Quests.services.QuestStatusChangeFactory", [
+	"journal-material.services.HasTimestampFactory",
+	function(HasTimestampFactory) {
+		var self = this;
+		this.type = "QuestStatusChange";
+		this.interfaces = HasTimestampFactory.interfaces + [this.type];
+
+		this._new = function(old_status, new_status, message){
+			var proto = HasTimestampFactory._new();
+
+			Object.assign(proto, {
+				old_status: old_status,
+				new_status: new_status,
+				message: message
+			});
+
+			return proto;			
 		}
 	}
 ])
