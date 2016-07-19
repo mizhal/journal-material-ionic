@@ -210,9 +210,9 @@ angular.module('journal-material.Quests.controllers', [])
 				template: "Why is this task blocked?",
 				inputType: "text",
 				inputPlaceholder: "reason"
-			}).then(function(ok_to_proceed){
-				if(ok_to_proceed) {
-					QuestService.setBlocked(quest).then(function(){
+			}).then(function(blocked_reason){
+				if(blocked_reason) {
+					QuestService.setBlocked(quest, blocked_reason).then(function(){
 						return $ionicHistory.clearCache();
 					})
 				}
