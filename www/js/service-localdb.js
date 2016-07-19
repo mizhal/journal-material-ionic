@@ -32,24 +32,32 @@ angular.module('journal-material.service-localdb', [])
 		}
 		/** END: SORTING PROTOCOL **/
 
-		this.Pouch = new PouchDB(this.dbname); // size limits ignored as of now for sanity sake
-
 		this.save = function(object /* :IDocument */) {
 			object.updated_at = new Date();
 			return self.Pouch.put(object)
 				.then(function(docsum){
 					object._rev = docsum.rev;
 					return docsum;
-				});
-		}
+				})
+				;
+		};
+
+		this.saveView = function(object) {
+			object.updated_at = new Date();
+			return self.Pouch.put(object)
+				.then(function(docsum){
+					object._rev = docsum.rev;
+					return docsum;
+				})
+		};
 
 		this.get = function(_id){
-			return self.Pouch.get(_id);
-		}
+			return self.Pouch.get(_id).catch(function(error){console.log(error);});
+		};
 
 		this.queryView = function(view, options){
 			options = options || {};
-			return self.Pouch.query(view, options);
+			return self.Pouch.query(view, options).catch(function(error){console.log(error);});
 		}
 
 		this.mapRedios = function(mapredios){
@@ -126,7 +134,6 @@ angular.module('journal-material.service-localdb', [])
 					;
 				promises.push(promise);
 			}
-
 			return Promise.all(promises);
 		}
 		/** END: VIEW MANAGEMENT **/

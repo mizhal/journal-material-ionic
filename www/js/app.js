@@ -100,7 +100,7 @@ angular.module('journal-material', [
   })
 
   .state('app.quests.listings', {
-    url: '/quests/list/{status}',
+    url: '/list/{status}',
     views: {
       content: {
         templateUrl: 'templates/quests/listing.html',
@@ -114,7 +114,7 @@ angular.module('journal-material', [
   })
 
   .state('app.quests.edit', {
-    url: '/quests/edit/{id}',
+    url: '/edit/{id}',
     views: {
       content: {
         templateUrl: 'templates/quests/edit.html',
@@ -127,12 +127,12 @@ angular.module('journal-material', [
     }
   }) 
 
-  .state('app.quest.detail', {
-    url: '/quests/show/{id}',
+  .state('app.quests.detail', {
+    url: '/show/{id}',
     views: {
       content: {
         templateUrl: 'templates/quests/detail.html',
-        controller: 'journal-material.Quests.DetailCtrl'
+        controller: 'journal-material.Quests.controllers.DetailCtrl'
       }
     }
   })

@@ -39,7 +39,10 @@ angular.module('journal-material.Quests.services', [])
 	"journal-material.services.SortCriteriaService",
 	"journal-material.service-localdb.DBService",
 	"journal-material.Quests.services.EnumService",
-	function($q, SortCriteriaService, DBService, EnumService){
+	"journal-material.Quests.services.QuestFactory",
+	"journal-material.Quests.services.QuestServiceInitializer",
+	"journal-material.Quests.services.TaskFactory",
+	function($q, SortCriteriaService, DBService, EnumService, QuestFactory, QuestServiceInitializer, TaskFactory){
 
 		var self = this;
 
@@ -47,17 +50,150 @@ angular.module('journal-material.Quests.services', [])
 		/** END: PRIVATE **/
 
 		/** PUBLIC **/
-		this.TranslateStatus = function(status){
+		this.TranslateStatus = function(status) {
 			return EnumService.QuestsStatusTranslation[status];
 		}
 
-		this.GetSummarizedQuestLog = function(sort_criteria){
-			return $q.defer().promise;
+		this.getSummarizedQuestLog = function(sort_criteria) {
+			return Promise.all([
+				self.getByStatus(EnumService.QuestStatus.FOCUS),
+				self.getByStatus(EnumService.QuestStatus.BLOCKED, 4),
+				self.countByStatus(EnumService.QuestStatus.BLOCKED),
+				self.getByStatus(EnumService.QuestStatus.OPEN, 4),
+				self.countByStatus(EnumService.QuestStatus.OPEN)	
+			]).spread(function(focus, blocked, n_blocked, open, n_open){
+				return {
+					focus: focus,
+					blocked: blocked,
+					n_blocked: n_blocked,
+					more_blocked: n_blocked > 4,
+					open: open,
+					n_open: n_open,
+					more_open: n_open > 4
+				}
+			})
 		}
 
-		this.GetQuestsForStatus = function(status, sort_criteria){
-			DBService.query("");
+		this.getByStatus = function(status, limit, sort_criteria) {
+			return DBService.queryView("quest_by_status/by_updated", {
+				startkey: [status],
+				endkey: [status, {}, {}],
+				include_docs: true,
+				limit: limit,
+			}).then(function(res){
+				return res.rows.map(function(it){
+					return it.doc;
+				});
+			})
 		}
+
+		this.countByStatus = function(status) {
+			return DBService.queryView("quest_by_status/by_updated", {
+				startkey: [status],
+				endkey: [status, {}, {}],
+				include_docs: false
+			}).then(function(res){
+				return res.rows.length;
+			})
+		}
+
+		this.save = function(quest){
+			return DBService.save(quest);
+		}
+
+		this.get = function(id){
+			return DBService.get(id);
+		}
+
+		this.newTask = function(name){
+			return TaskFactory._new(name);
+		}
+		/** next statuses **/
+		this.canBlock = function(quest){
+			var allowed = [
+				EnumService.QuestStatus.FOCUS,
+				EnumService.QuestStatus.OPEN
+			]
+			return allowed.indexOf(quest.status) != -1;
+		}
+
+		this.canBacklog = function(quest){
+			var allowed = [
+				EnumService.QuestStatus.FOCUS,
+				EnumService.QuestStatus.FAILED,
+				EnumService.QuestStatus.CANCELLED,
+				EnumService.QuestStatus.DONE,
+				EnumService.QuestStatus.SCHEDULED
+			]
+			return allowed.indexOf(quest.status) != -1;
+		}
+
+		this.canDone = function(quest) {
+			var allowed = [
+				EnumService.QuestStatus.FOCUS,
+				EnumService.QuestStatus.OPEN
+			]
+			return allowed.indexOf(quest.status) != -1;
+		}
+
+		this.canFail = function(quest) {
+			var allowed = [
+				EnumService.QuestStatus.FOCUS,
+				EnumService.QuestStatus.OPEN
+			]
+			return allowed.indexOf(quest.status) != -1;
+		}
+
+		this.canSchedule = function(quest) {
+			var allowed = [
+				EnumService.QuestStatus.FOCUS,
+				EnumService.QuestStatus.OPEN
+			]
+			return allowed.indexOf(quest.status) != -1;
+		}
+
+		this.canFocus = function(quest) {
+			var allowed = [
+				EnumService.QuestStatus.OPEN,
+				EnumService.QuestStatus.BLOCKED,
+				EnumService.QuestStatus.SCHEDULED,
+				EnumService.QuestStatus.DONE
+			]
+			return allowed.indexOf(quest.status) != -1;
+		}
+		/** END: next statuses **/
+
+		/** Status transition **/
+		this.isFocusFull = function(){
+			return self.countByStatus(EnumService.QuestStatus.FOCUS).then(function(count){
+				return count >= 4;
+			})
+		}
+
+		this.setFocus = function(quest) {
+			quest.status = EnumService.QuestStatus.FOCUS;
+			return self.save(quest);
+		}
+
+		this.removeLatestFromFocus = function(){
+			return self.getByStatus(EnumService.QuestStatus.FOCUS)
+				.then(function(quests){
+					var drop = quests[quests.length - 1];
+					return self.setOpen(drop);
+				})
+		}
+
+		this.setOpen = function(quest) {
+			quest.status = EnumService.QuestStatus.OPEN;
+			return self.save(quest);
+		}
+
+		this.setBlocked = function(quest) {
+			quest.status = EnumService.QuestStatus.BLOCKED;
+			return self.save(quest);
+		}
+		/** END: Status transition **/
+
 		/** END: PUBLIC **/
 	}
 ])
@@ -67,49 +203,37 @@ angular.module('journal-material.Quests.services', [])
 	"$q",
 	"journal-material.services.SortCriteriaService",
 	"journal-material.service-localdb.DBService",
-	function($q, SortCriteriaService, DBService){
+	"journal-material.Quests.services.QuestFactory",
+	function($q, SortCriteriaService, DBService, QuestFactory){
 		var self;
 
 		/** DB VIEWS **/
 		this.views = {};
 
-		this.views.quest_by_status_by_updated = {
-			_id: "_design/quest_status_group",
-			filters: {
-				by_status: function(quest, req){
-					return quest.status == req.status; 
-				}.toString()
-			},
+		var name = "quest_by_status" 
+		this.views.quest_by_status = {
+			name: name,
+			_id: "_design/" + name,
 			views: {
 				by_updated: {
-					map: function(quest){ 
-						return emit([quest.status, quest.updated_at], quest); 
-					}.toString()
+					map: function(quest, req){ 
+						if(quest.type == "$$1")
+							return emit([quest.status, quest.updated_at], quest); 
+					}.toString().replace("$$1", QuestFactory.type)
 				},
 				by_created: {
-					map: function(quest){ 
-						return emit([quest.status, quest.created_at], quest); 
-					}.toString()	
-				}
-			}
-		};
-
-		this.views.quest_status_by_created = {
-			_id: "_design/quest_status_by_updated",
-			filters: {
-				by_status: function(quest, req){
-					return quest.status == req.status; 
-				}.toString()
-			},
-			views: {
-				by_status: {
-					map: function(quest){ 
-						return emit([quest.status, quest.created_at], quest); 
-					}.toString()
+					map: function(quest, req){ 
+						if(quest.type == "$$1")
+							return emit([quest.status, quest.created_at], quest); 
+					}.toString().replace("$$1", QuestFactory.type)	
 				}
 			}
 		};
 		/** END: DB VIEWS **/
+
+		this.init = function(){
+			DBService.checkDBViews(this.views);
+		}
 	}
 ])
 
@@ -126,15 +250,17 @@ angular.module('journal-material.Quests.services', [])
 			var proto = HasTimestampFactory._new();
 
 			Object.assign(proto, {
+				_id: this.type + "-" + proto.uuid,
 				type: self.type,
-				interfaces: self.interfaces,
 				name: name,
 				description: desc,
 				tasks: [],
 				deadline: null,
 				status: EnumService.QuestStatus.OPEN,
 				context: null,
-				sections: []
+				sections: [],
+				scheduled_to: null,
+				blocked_reason: null
 			});
 
 			return proto;
@@ -163,6 +289,14 @@ angular.module('journal-material.Quests.services', [])
 
 			return proto;
 		}
+	}
+])
+
+.run([
+	"journal-material.Quests.services.QuestServiceInitializer",
+	function(QuestServiceInitializer){
+
+		QuestServiceInitializer.init();
 	}
 ])
 ;

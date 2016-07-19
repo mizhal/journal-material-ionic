@@ -19,6 +19,10 @@
 	right: 88px!important;
 }
 
+.button-right-third {
+	right: 160px!important;
+}
+
 .separator1 {
 	background-image: url("../img/separator1.png");
 	background-size: 100%;
@@ -127,8 +131,8 @@
 .quest-log-overview h3, .quest-log-overview .item h3 {
 	margin: 0;
 	font-size: 16pt;
-	background-color: white;
-	padding: 0.3em 1em;
+	background-color: #eee;
+	padding: 0.3em 0.3em;
 	min-width: 100%;
 }
 
@@ -143,6 +147,14 @@
 
 .quest-log-overview h3 i.icon {
 	margin-right: 0.2em;
+}
+
+.quest-log-overview .quest.item {
+	padding: 5px 5px 5px 10px;
+}
+
+.quest-log-overview .quest.item h4 {
+	font-size: 1.2em;
 }
 /*** END: QUEST LOG OVERVIEW **/
 
@@ -200,3 +212,62 @@
 	min-width: 100%;
 }
 /*** FIN: DASHBOARD ***/
+
+/** FORMS **/
+.form input::-webkit-input-placeholder, 
+.form textarea::-webkit-input-placeholder {
+	color: #000;
+	font-size: 12pt;
+}
+
+.form button.wide {
+	width: 100%;
+
+	border-radius: 3px;
+	border: 0;
+	box-shadow: 1px 1px 1px #000;
+	padding: 10px 0;
+
+	color: #fff;
+	background-color: #440E0E;
+}
+
+.form button.decorated {
+	border-radius: 3px;
+	border: 0;
+	box-shadow: 1px 1px 1px #000;
+
+	padding: 10px 25px;
+
+	color: #fff;
+	background-color: #440E0E;	
+}
+
+.form button[disabled="disabled"] {
+	background-color: #bbbbbb;		
+}
+
+.form .form-errors {
+	font-size: 9pt;
+	color: #ff0000;
+}
+/** END: FORMS **/
+
+/** QUEST DETAIL **/
+.assassins-creed-titles.quest h2 {
+	font-size: 1.5em;
+}
+
+article.quest section header {
+
+}
+
+article.quest .actions-strip .icon {
+	font-size: 24pt;
+	margin: 0 0.6em;
+}
+
+article.quest .actions-strip .icon:first-child {
+	margin-left: 0;
+}
+/** END: QUEST DETAIL **/
