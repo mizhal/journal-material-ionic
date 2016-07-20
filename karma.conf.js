@@ -27,6 +27,15 @@ module.exports = function(config) {
             // END: TESTS
         ],
         browsers: ['PhantomJS', 'Chrome'],
+        reporters: ['progress', 'coverage'],
+        preprocessors: {
+            './www/js/*.js': ['coverage'],
+            './www/js/quests/*.js': ['coverage']
+        },
+        coverageReporter: {
+          type : 'html',
+          dir : 'coverage/'
+        },
         singleRun: true,
       }
   );
