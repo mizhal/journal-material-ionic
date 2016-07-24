@@ -1,6 +1,6 @@
 describe("testing", function(){
 	it("works!", function(done){
-		expect(null).not.toBe(null);
+		expect(null).toBe(null);
 		done();
 	})
 })
