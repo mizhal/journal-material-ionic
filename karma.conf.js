@@ -10,6 +10,7 @@ module.exports = function(config) {
             './www/lib/ionic-material/dist/ionic.material.min.js',
             './www/lib/angular-locale_es-es.js',
             './www/lib/angular-messages.min.js',
+            './www/lib/angular-mocks-1.5.5.js',
             './www/lib/pouchdb/pouchdb-5.3.2.min.js',
             './www/lib/hashids.min.js',
             './www/lib/ionic-datepicker.bundle.min.js',
@@ -18,8 +19,15 @@ module.exports = function(config) {
             // END: LIBS
 
             // APP
-            './www/js/*.js',
-            './www/js/quests/*.js',
+            './www/js/app.js',
+            './www/js/controllers.js',
+            './www/js/directives.js',
+            './www/js/services.js',
+            './www/js/service-localdb.js',
+            './www/js/quests/controllers.js',
+            './www/js/quests/directives.js',
+            './www/js/quests/services.js',
+            './www/js/quests/seed.js',
             // END: APP
 
             // TESTS
