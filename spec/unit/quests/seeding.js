@@ -5,6 +5,12 @@ describe("Quest Seeding", function(){
 	beforeEach(module("journal-material.Quests.services"));
 	beforeEach(module("journal-material.Quests.seed"));
 
+	beforeEach(function(){
+		require.config({
+			baseUrl: "../../../www"
+		})
+	})
+
 	var QuestSeeder = null;
 	var QuestService = null;
 	var QuestFactory = null;
@@ -41,7 +47,7 @@ describe("Quest Seeding", function(){
 		])
 	})
 
-	it("works!", function(done){
+	it("can seed the database", function(done){
 		QuestSeeder.createSet1()
 		.then(function(){
 			return QuestService.all();
@@ -49,7 +55,8 @@ describe("Quest Seeding", function(){
 			expect(res.length).toBe(10);
 			done();
 		})
-		.catch(function(err){ console.log(err); 
+		.catch(function(err){ 
+			console.log(err.toString());
 			done.fail(err);
 		})
 		;

@@ -6,6 +6,7 @@ module.exports = function(config) {
         frameworks: ['jasmine'],
         files: [
             // LIBS
+            "./www/lib/faker.min.js",
             './www/lib/ionic/js/ionic.bundle.js',
             './www/lib/ionic-material/dist/ionic.material.min.js',
             './www/lib/angular-locale_es-es.js',
@@ -15,6 +16,7 @@ module.exports = function(config) {
             './www/lib/hashids.min.js',
             './www/lib/ionic-datepicker.bundle.min.js',
             './www/lib/bluebird.js',
+            "./www/lib/require.js",
             'cordova.js',
             // END: LIBS
 
@@ -34,7 +36,7 @@ module.exports = function(config) {
             './spec/unit/**/*.js'
             // END: TESTS
         ],
-        browsers: ['PhantomJS'], //, 'Chrome'],
+        browsers: ['Chrome'], // 'PhantomJS', 
         reporters: ['progress', 'coverage'],
         preprocessors: {
             './www/js/*.js': ['coverage'],
