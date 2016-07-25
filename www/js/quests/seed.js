@@ -11,15 +11,18 @@ angular.module('journal-material.Quests.seed', [])
 		var faker_loaded = null;
 		var EnsureFakerLoaded = function(){
 			faker_loaded  = new Promise(function(resolve, reject) {
-				requirejs(["lib/faker.min"], 
-					function(faker){
-						resolve();
-					},
-					function(err) {
-						reject(err);
-					}
-				)
-				;
+				if(faker)
+					resolve()
+			    else
+					requirejs(["lib/faker.min"], 
+						function(faker){
+							resolve();
+						},
+						function(err) {
+							reject(err);
+						}
+					)
+					;
 			})
 			;
 
@@ -31,9 +34,6 @@ angular.module('journal-material.Quests.seed', [])
 				return EnsureFakerLoaded()
 				.then(function(){
 					return callback();
-				})
-				.catch(function(err){
-					console.log(err);
 				})
 			}
 		}
