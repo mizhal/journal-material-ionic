@@ -7,19 +7,6 @@ angular.module('journal-material.Quests.seed', [])
 	function(QuestService, QuestFactory, TaskFactory){
 		var self = this;
 
-		/** PUBLIC **/
-		this.createSet1 = WithFaker(function(){
-
-			// 10 quests en estado open
-			for(var i = 0; i < 10; i++) {
-				var n = QuestFactory._new();
-				QuestService.save(n);
-			}
-
-		})
-		;
-		/** END: PUBLIC **/
-
 		/** PRIVATE **/
 		var faker_loaded = null;
 		var EnsureFakerLoaded = function(){
@@ -35,10 +22,12 @@ angular.module('journal-material.Quests.seed', [])
 				;
 			})
 			;
+
+			return faker_loaded;
 		}
 
 		var WithFaker = function(callback) {
-			return EnsureFakerLoaded
+			return EnsureFakerLoaded()
 			.then(function(){
 				return callback();
 			})
@@ -47,6 +36,19 @@ angular.module('journal-material.Quests.seed', [])
 			})
 		}
 		/** END: PRIVATE **/
+
+		/** PUBLIC **/
+		this.createSet1 = WithFaker(function(){
+
+			// 10 quests en estado open
+			for(var i = 0; i < 10; i++) {
+				var n = QuestFactory._new();
+				QuestService.save(n);
+			}
+
+		})
+		;
+		/** END: PUBLIC **/
 
 		/** INIT **/
 		/** END: INIT **/
