@@ -27,25 +27,31 @@ angular.module('journal-material.Quests.seed', [])
 		}
 
 		var WithFaker = function(callback) {
-			return EnsureFakerLoaded()
-			.then(function(){
-				return callback();
-			})
-			.catch(function(err){
-				console.log(err);
-			})
+			return function() {
+				return EnsureFakerLoaded()
+				.then(function(){
+					return callback();
+				})
+				.catch(function(err){
+					console.log(err);
+				})
+			}
 		}
 		/** END: PRIVATE **/
 
 		/** PUBLIC **/
 		this.createSet1 = WithFaker(function(){
 
+			var promises = [];
+
 			// 10 quests en estado open
 			for(var i = 0; i < 10; i++) {
 				var n = QuestFactory._new();
-				QuestService.save(n);
+				promises.push(QuestService.save(n));
 			}
 
+			return Promise.all(promises);
+			
 		})
 		;
 		/** END: PUBLIC **/

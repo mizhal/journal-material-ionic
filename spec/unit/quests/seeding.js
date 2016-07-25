@@ -6,17 +6,21 @@ describe("Quest Seeding", function(){
 	beforeEach(module("journal-material.Quests.seed"));
 
 	var QuestSeeder = null;
+	var QuestService = null;
 	var QuestFactory = null;
 	var DBService = null;
 
 	beforeEach(function(done){
 		inject([
 			"journal-material.Quests.services.QuestFactory",
+			"journal-material.Quests.services.QuestService",
 			"journal-material.Quests.seed.QuestSeeder",
 			"journal-material.service-localdb.DBService",
-			function(_QuestFactory, _QuestSeeder, _DBService){
+			function(_QuestFactory, _QuestService, _QuestSeeder, _DBService){
 				QuestSeeder = _QuestSeeder;
 				expect(QuestSeeder).not.toBeUndefined();
+				QuestService = _QuestService;
+				expect(QuestService).not.toBeUndefined();
 				DBService = _DBService;
 				expect(DBService).not.toBeUndefined();
 				QuestFactory = _QuestFactory;
@@ -38,7 +42,16 @@ describe("Quest Seeding", function(){
 	})
 
 	it("works!", function(done){
-		expect(null).toBe(null);
-		done();
+		QuestSeeder.createSet1()
+		.then(function(){
+			return QuestService.all();
+		}).then(function(res){
+			expect(res.length).toBe(10);
+			done();
+		})
+		.catch(function(err){ console.log(err); 
+			done.fail(err);
+		})
+		;
 	})
 })

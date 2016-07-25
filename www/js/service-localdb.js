@@ -51,6 +51,16 @@ angular.module('journal-material.service-localdb', [])
 				})
 		};
 
+		this.all = function(options){
+			return self.Pouch.allDocs(options)
+			.then(function(res){
+				return res.rows.map(function(it){
+					return it.doc;
+				});
+			})
+			;
+		}
+
 		this.get = function(_id){
 			return self.Pouch.get(_id).catch(function(error){console.log(error);});
 		};

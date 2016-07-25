@@ -49,6 +49,17 @@ angular.module('journal-material.Quests.services', [])
 		var self = this;
 
 		/** PUBLIC **/
+
+		this.all = function(offset, limit){
+			return DBService.all({
+				include_docs: true,
+				conflicts: true,
+				startkey: QuestFactory.type + "-",
+				endkey: QuestFactory.type + "-\uffff"
+			})
+			;
+		}
+
 		this.TranslateStatus = function(status) {
 			return EnumService.QuestsStatusTranslation[status];
 		}
