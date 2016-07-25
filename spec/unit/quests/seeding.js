@@ -1,5 +1,7 @@
 describe("Quest Seeding", function(){
 
+	beforeEach(module("journal-material.service-localdb"));
+	beforeEach(module("journal-material.services"));
 	beforeEach(module("journal-material.Quests.services"));
 	beforeEach(module("journal-material.Quests.seed"));
 

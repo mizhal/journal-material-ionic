@@ -34,7 +34,7 @@ module.exports = function(config) {
             './spec/unit/**/*.js'
             // END: TESTS
         ],
-        browsers: ['PhantomJS', 'Chrome'],
+        browsers: ['PhantomJS'], //, 'Chrome'],
         reporters: ['progress', 'coverage'],
         preprocessors: {
             './www/js/*.js': ['coverage'],
