@@ -56,5 +56,21 @@
 		Quest "1" *--> "*" Task: tasks
 		Quest "1" *--> "*" QuestStatusChange: status_changelog
 		Quest "1" *--> "*" QuestSection: sections
+
+		Quest "1" o--> "*" Journal.JournalEntry: journal
+	}
+
+	package Journal {
+		class JournalEntry <<HasTimestamp>> {
+			content: string
+		}
+
+		class JournalMetadata <<HasTimestamp>> {
+			key: string
+			value: string
+			reference_value: string
+		}
+
+		JournalEntry "1" *--> "*" JournalMetadata: metadata
 	}
 @enduml
