@@ -1,4 +1,4 @@
-﻿Feature: Projects and scopes
+﻿Feature: projects-scopes
 	As journal user
 	I want to set high level containers for quests, tasks and efforts
 	So I can keep context of each quest and task

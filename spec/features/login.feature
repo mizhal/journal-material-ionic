@@ -1,4 +1,4 @@
-﻿Feature: Log in
+﻿Feature: login
 	As a service user
 	I want to log into the service
 	So I can access and update my journal
