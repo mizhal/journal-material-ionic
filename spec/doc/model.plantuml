@@ -1,0 +1,60 @@
+@startuml
+
+	class HasTimestamp {
+		uuid: string
+		shortUuid: string
+		created_at: DateTime
+		updated_at: DateTime?
+	}
+
+	class SyncableNode <<HasTimestamp>> {
+		name: string
+		crypted_credentials: string
+		user: string?
+		password: string?
+		use_credentials: boolean
+		protocol: string
+		server_path: string
+		is_live: boolean
+		last_time_synced: DateTime?
+		last_time_failed: DateTime?
+		sync_log: [] string
+		is_locked: boolean
+	}
+
+	package Quests {
+
+		class QuestStatus << (E, enum) >>
+		class TaskStatus << (E, enum) >>
+		
+		class Quest <<HasTimestamp>> {
+			name: string
+			description: string
+			deadline: DateTime?
+			status: QuestStatus
+			context: string?
+			scheduled_to: DateTime?
+			blocked_reason: string?
+		}
+
+		class Task <<HasTimestamp>> {
+			name: string
+			status: TaskStatus
+		}
+
+		class QuestSection <<HasTimestamp>> {
+			name: string
+			content: string
+		}
+
+		class QuestStatusChange <<HasTimestamp>> {
+			old_status: QuestStatus
+			new_status: QuestStatus
+			message: string?
+		}
+
+		Quest "1" *--> "*" Task: tasks
+		Quest "1" *--> "*" QuestStatusChange: status_changelog
+		Quest "1" *--> "*" QuestSection: sections
+	}
+@enduml
