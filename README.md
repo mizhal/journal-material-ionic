@@ -10,3 +10,4 @@ Aplicación del diario.
 ## Secciones
 
 * [Modelo de datos](./spec/doc/Model.md)
+* [Instalación](./spec/doc/Instalacion.md)

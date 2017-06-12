@@ -1,7 +1,9 @@
 {
   "name": "journal-material-ionic",
   "version": "1.1.1",
-  "description": "journal-material-ionic: An Ionic project",
+  "description": "journal-material-ionic: A GTD-ish journal app",
+  "repository": "https://github.com/mizhal/journal-material-ionic",
+  "license": "GPLv2",
   "dependencies": {
     "gulp": "^3.5.6",
     "gulp-sass": "^2.0.4",
