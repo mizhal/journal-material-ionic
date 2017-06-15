@@ -30,3 +30,11 @@ ionic serve
 ```
 
 Si no se ha abierto el navegador, la aplicación puede verse en [este enlace](http://localhost:8100).
+
+## Ejecutar tests
+
+Para ejecutar los tests automáticos, tomárselo con **karma** ;):
+
+```
+karma start
+```
