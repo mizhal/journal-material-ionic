@@ -5,7 +5,16 @@ angular.module("journal-material.Journal.services", [])
 		this.EditStatus = {
 			EDITABLE: "EDITABLE",
 			DELETED: "DELETED"
-		};
+		}
+
+		this.ViewKey = {
+			BY_UPDATED_UPDATED_AT: 0,
+			BY_UPDATED_QUEST_ID: 1,
+			BY_UPDATED_EDIT_STATUS: 2,
+			BY_QUEST_QUEST_ID: 0,
+			BY_QUEST_UPDATED_AT: 1,
+			BY_QUEST_EDIT_STATUS: 2
+		}
 	}
 ])
 
@@ -33,12 +42,23 @@ angular.module("journal-material.Journal.services", [])
 				startKey: [quest_id],
 				endKey: [quest_id, {}, {}],
 				include_docs: true,
-				limit:limit
+				limit:limit,
+				descending: true // orden cronologico inverso
 			})
 			.then(function(res){
-				return res.rows.map(function(it){
-					return it.doc;
-				})
+				if(include_deleted) 
+					return res.rows
+						.map(function(it){
+							return it.doc;
+						})
+				else
+					return res.rows
+						.filter(function(it){
+							return it.key[EnumService.ViewKey.BY_QUEST_EDIT_STATUS] != EnumService.EditStatus.DELETED;
+						})
+						.map(function(it){
+							return it.doc;
+						})
 			})
 			;
 		}
@@ -67,16 +87,22 @@ angular.module("journal-material.Journal.services", [])
 			name: name,
 			_id: "_design/" + name,
 			views: {
-				by_updated: {
+				by_updated: { /** [UpdatedAt, Quest-Id, EditStatus] -> Entry **/
 					map: function(journal_entry, request){
 						if(journal_entry.type == "$$1")
-							return emit([journal_entry.updated_at, journal_entry.quest_id, journal_entry.edit_status], journal_entry);
+							return emit(
+								[journal_entry.updated_at, journal_entry.quest_id, journal_entry.edit_status], 
+								journal_entry
+							);
 					}.toString().replace("$$1", JournalEntryFactory.type)
 				},
-				by_quest: {
+				by_quest: { /** [Quest-Id, UpdatedAt, EditStatus] -> Entry **/
 					map: function(journal_entry, request){
 						if(journal_entry.type == "$$1")
-							return emit([journal_entry.quest_id, journal_entry.updated_at, journal_entry.edit_status], journal_entry);
+							return emit(
+									[journal_entry.quest_id, journal_entry.updated_at, journal_entry.edit_status], 
+									journal_entry
+								);
 					}.toString().replace("$$1", JournalEntryFactory.type)
 				}
 			}
