@@ -179,4 +179,46 @@ angular.module('journal-material.service-localdb', [])
 		/** END: VIEW MANAGEMENT **/
 	}
 ])
+
+.service("journal-material.service-localdb.FakerService",
+[
+	function(){
+		var self = this;
+
+		/** @section Public **/
+		this.withFaker = function(callback){
+			return function(){
+				return EnsureFakerLoaded()
+					.then(function(){
+						return callback();
+					})
+			}
+		}
+		/** @endsection Public **/
+
+		/** @section Private **/
+		var faker_loaded = null;
+		var EnsureFakerLoaded = function(){
+			if (!faker_loaded)
+				faker_loaded = new Promise(function(resolve, reject){
+					if(faker)
+						resolve();
+					else
+						requirejs(["lib/faker.min"], 
+							function(faker){
+								resolve()
+							},
+							function(error){
+								reject(error);
+							}
+						)
+				})
+				;
+
+			return faker_loaded;
+		};
+		/** @endsection Private **/
+	}
+])
+
 ;

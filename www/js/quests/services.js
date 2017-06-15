@@ -226,7 +226,7 @@ angular.module('journal-material.Quests.services', [])
 	"journal-material.service-localdb.DBService",
 	"journal-material.Quests.services.QuestFactory",
 	function($q, SortCriteriaService, DBService, QuestFactory){
-		var self;
+		var self = this;
 
 		/** DB VIEWS **/
 		this.views = {};

@@ -1,46 +1,15 @@
 angular.module('journal-material.Quests.seed', [])
 
 .service("journal-material.Quests.seed.QuestSeeder", [
+	"journal-material.service-localdb.FakerService",
 	"journal-material.Quests.services.QuestService",
 	"journal-material.Quests.services.QuestFactory",
 	"journal-material.Quests.services.TaskFactory",
-	function(QuestService, QuestFactory, TaskFactory){
+	function(FakerService, QuestService, QuestFactory, TaskFactory){
 		var self = this;
 
-		/** PRIVATE **/
-		var faker_loaded = null;
-		var EnsureFakerLoaded = function(){
-			faker_loaded  = new Promise(function(resolve, reject) {
-				if(faker)
-					resolve()
-			    else
-					requirejs(["lib/faker.min"], 
-						function(faker){
-							resolve();
-						},
-						function(err) {
-							reject(err);
-						}
-					)
-					;
-			})
-			;
-
-			return faker_loaded;
-		}
-
-		var WithFaker = function(callback) {
-			return function() {
-				return EnsureFakerLoaded()
-				.then(function(){
-					return callback();
-				})
-			}
-		}
-		/** END: PRIVATE **/
-
-		/** PUBLIC **/
-		this.createSet1 = WithFaker(function(){
+		/** @section PUBLIC **/
+		this.createSet1 = FakerService.withFaker(function(){
 
 			var promises = [];
 
@@ -54,10 +23,10 @@ angular.module('journal-material.Quests.seed', [])
 			
 		})
 		;
-		/** END: PUBLIC **/
+		/** @endsection PUBLIC **/
 
-		/** INIT **/
-		/** END: INIT **/
+		/** @section INIT **/
+		/** @endsection INIT **/
 	}
 ])
 
