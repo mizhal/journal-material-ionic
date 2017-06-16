@@ -51,10 +51,11 @@ describe("Quest Seeding", function(){
 		QuestSeeder.createSet1()
 		.then(function(){
 			return QuestService.all();
-		}).then(function(res){
-			expect(res.length).toBe(10);
-			done();
 		})
+		.then(function(res){
+			expect(res.length).toBe(10);
+		})
+		.finally(done)
 		.catch(function(err){ 
 			console.log(err.toString());
 			done.fail(err);

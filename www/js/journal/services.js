@@ -38,28 +38,47 @@ angular.module("journal-material.Journal.services", [])
 		}
 
 		this.getLatestEntriesForQuest = function(quest_id, limit, include_deleted) {
-			return DBService.queryView("journal_by_quest/by_quest", {
+			return self.getEntriesForQuest(quest_id, limit, 
+					SortCriteriaService.Enum.DATE_DESC, include_deleted)
+				;
+		}
+
+		this.getEntriesForQuest = function(quest_id, limit, sort_criteria, include_deleted) {
+			var options = {
 				startKey: [quest_id],
 				endKey: [quest_id, {}, {}],
-				include_docs: true,
-				limit:limit,
-				descending: true // orden cronologico inverso
-			})
-			.then(function(res){
-				if(include_deleted) 
-					return res.rows
-						.map(function(it){
-							return it.doc;
-						})
-				else
-					return res.rows
-						.filter(function(it){
-							return it.key[EnumService.ViewKey.BY_QUEST_EDIT_STATUS] != EnumService.EditStatus.DELETED;
-						})
-						.map(function(it){
-							return it.doc;
-						})
-			})
+				include_docs: true
+			};
+			if(limit)
+				options.limit = limit;
+			if(sort_criteria)
+				switch(sort_criteria){
+					case SortCriteriaService.Enum.DATE_DESC:
+						options.descending = true;
+						break;
+					case SortCriteriaService.Enum.DATE_ASC:
+						options.descending = false;
+						break;
+					default:
+						options.descending = false;
+				}
+
+			return DBService.queryView("journal_by_quest/by_quest", options) // etapa QUERY
+				.then(function(res){ // etapa FILTRADO
+					if(include_deleted) 
+						return res.rows
+							.map(function(it){
+								return it.doc;
+							})
+					else
+						return res.rows
+							.filter(function(it){
+								return it.key[EnumService.ViewKey.BY_QUEST_EDIT_STATUS] != EnumService.EditStatus.DELETED;
+							})
+							.map(function(it){
+								return it.doc;
+							})
+				})
 			;
 		}
 
@@ -137,3 +156,12 @@ angular.module("journal-material.Journal.services", [])
 		}
 	}
 ])
+
+.run([
+	"journal-material.Journal.services.JournalServiceInitializer",
+	function(JournalServiceInitializer){
+		JournalServiceInitializer.init();
+	}
+])
+
+;
