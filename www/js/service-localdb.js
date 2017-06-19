@@ -9,7 +9,7 @@ angular.module('journal-material.service-localdb', [])
 		this.dbname = null;
 		this.connect = function(dbname){
 			self.dbname = dbname;
-			self.Pouch = new PouchDB(self.dbname)
+			self.Pouch = new PouchDB(self.dbname);
 			return self.recreateViews();
 		}
 
@@ -67,7 +67,14 @@ angular.module('journal-material.service-localdb', [])
 
 		this.queryView = function(view, options){
 			options = options || {};
-			return self.Pouch.query(view, options).catch(function(error){console.log(error);});
+			return self.Pouch.query(view, options)
+				.catch(function(error){ 
+					if(error.status == 404) // undefined view
+						throw new self.DBException("undefined view " + view);
+					else
+						return error;
+				})
+				;
 		}
 
 		this.mapRedios = function(mapredios){
@@ -98,18 +105,11 @@ angular.module('journal-material.service-localdb', [])
 		}
 
 		this.clear = function(){
-			return self.Pouch.allDocs()
+			return self.Pouch.destroy()
 				.then(function(result){
-						var rows = result.rows.filter(function(row){
-							return row.id.indexOf("_design/") != 0;
-						})
-						var promises = rows.map(function(row){
-							return self.destroyIds(row.id, row.value.rev);
-						})
-
-						return Promise.all(promises).then(function() { return; })
-					}
-				)
+					return self.connect(self.dbname);
+				})
+				;
 		}
 
 		this.sync = function(url, remote_options) {
@@ -148,6 +148,8 @@ angular.module('journal-material.service-localdb', [])
 			registered_views[view._id] = view;
 		}
 		function RegisteredViews(){
+			console.log("Current views:");
+			console.log(registered_views);
 			return registered_views;
 		}
 
@@ -158,9 +160,6 @@ angular.module('journal-material.service-localdb', [])
 		}
 
 		this.recreateViews = function(){
-			if(!self.Pouch)
-				return;
-
 			var views = RegisteredViews();
 			var promises = []
 			for(var i in views) {
@@ -177,6 +176,13 @@ angular.module('journal-material.service-localdb', [])
 			return Promise.all(promises);
 		}
 		/** END: VIEW MANAGEMENT **/
+
+		/** @section Exceptions **/
+		this.DBException = function(message){
+			this.message = message;
+		}
+		this.DBException.prototype = new Error();
+		/** @endsection Exceptions **/
 	}
 ])
 

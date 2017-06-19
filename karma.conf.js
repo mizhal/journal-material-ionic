@@ -50,7 +50,7 @@ module.exports = function(config) {
           type : 'html',
           dir : 'coverage/'
         },
-        singleRun: true,
+        singleRun: false,
       }
   );
 };
