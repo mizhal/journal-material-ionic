@@ -9,8 +9,18 @@ angular.module('journal-material.service-localdb', [])
 		this.dbname = null;
 		this.connect = function(dbname){
 			self.dbname = dbname;
-			self.Pouch = new PouchDB(self.dbname);
-			return self.recreateViews();
+			var promise = new Promise(function(resolve, reject){
+					self.Pouch = new PouchDB(self.dbname);
+					if(self.Pouch) 
+						resolve();
+					else
+						reject();	
+				})
+				;
+
+			return promise
+				.then(self.recreateViews)
+				;
 		}
 
 		/** SORTING PROTOCOL **/
@@ -148,8 +158,6 @@ angular.module('journal-material.service-localdb', [])
 			registered_views[view._id] = view;
 		}
 		function RegisteredViews(){
-			console.log("Current views:");
-			console.log(registered_views);
 			return registered_views;
 		}
 
@@ -224,6 +232,14 @@ angular.module('journal-material.service-localdb', [])
 			return faker_loaded;
 		};
 		/** @endsection Private **/
+	}
+])
+
+.run([
+	"journal-material.service-localdb.DBService",
+	function(DBService){
+		var userdb_name = "username" + "_localdb"; //TODO: get user name
+		return DBService.connect(userdb_name);
 	}
 ])
 

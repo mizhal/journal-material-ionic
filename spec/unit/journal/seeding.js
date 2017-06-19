@@ -24,9 +24,13 @@ describe("Journal Seeding", function(){
 			"journal-material.service-localdb.DBService",
 			function(_JornalEntryFactory, _JournalService, _JournalSeeder, _DBService){
 				JournalEntryFactory = _JornalEntryFactory;
+				expect(JournalEntryFactory).not.toBeNull();
 				JournalService = _JournalService;
+				expect(JournalService).not.toBeNull();
 				JournalSeeder = _JournalSeeder;
+				expect(JournalSeeder).not.toBeNull();
 				DBService = _DBService;
+				expect(DBService).not.toBeNull();
 
 				localStorage.clear();
 
