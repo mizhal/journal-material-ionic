@@ -31,8 +31,8 @@ angular.module("journal-material.Journal.services", [])
 			return DBService.all({
 				include_docs: true,
 				conflicts: true,
-				startKey: JournalEntryFactory.type + "-",
-				endKey: JournalEntryFactory.type + "-\uffff"
+				startkey: JournalEntryFactory.type + "-",
+				endkey: JournalEntryFactory.type + "-\uffff"
 			})
 			;
 		}
@@ -139,7 +139,7 @@ angular.module("journal-material.Journal.services", [])
 	"journal-material.Journal.services.EnumService",
 	function(HasTimestampFactory, EnumService) {
 		var self = this;
-		this.type = "JournalEntry";
+		this.type = "Je";
 		this.interfaces = HasTimestampFactory.interfaces + [this.type];
 
 		this._new = function(text /* :String */, quest_id /* :uuid? */) {
