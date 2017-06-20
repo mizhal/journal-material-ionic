@@ -64,9 +64,12 @@ angular.module('journal-material.service-localdb', [])
 		this.all = function(options){
 			return self.Pouch.allDocs(options)
 			.then(function(res){
-				return res.rows.map(function(it){
-					return it.doc;
-				});
+				if(res.rows.length > 0)
+					return res.rows.map(function(it){
+						return it.doc;
+					});
+				else
+					return [];
 			})
 			;
 		}
@@ -115,10 +118,20 @@ angular.module('journal-material.service-localdb', [])
 		}
 
 		this.clear = function(){
-			return self.Pouch.destroy()
-				.then(function(result){
-					return self.connect(self.dbname);
+			return self.Pouch.allDocs()
+				.then(function(docs){
+					if(docs)
+						return Promise.mapSeries(docs.rows, function(doc){
+								return self.destroyIds(doc.id, doc.value.rev)
+									;
+							})
+							.all()
+							;
 				})
+				.then(function(){
+					return self.Pouch.compact();
+				})
+				.then(self.recreateViews)
 				;
 		}
 

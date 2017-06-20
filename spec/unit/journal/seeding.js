@@ -36,11 +36,11 @@ describe("Journal Seeding", function(){
 
 				DBService.connect("test")
 				.then(function(){
-					return DBService.clear();	
+					//return DBService.clear();	
 				})
 				.catch(function(error){
 					console.log("ERROR CLEARING DB " + error);
-					expect(error).toBeUndefined();
+					expect(error).toBeNull();
 				})
 				.finally(done)
 			}

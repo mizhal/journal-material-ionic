@@ -40,7 +40,7 @@ describe("Journal Seeding", function(){
 				})
 				.catch(function(error){
 					console.log("ERROR CLEARING DB " + error);
-					expect(error).toBeUndefined();
+					expect(error).toBeNull();
 				})
 				.finally(done)
 			}
