@@ -24,13 +24,13 @@ describe("Quest Seeding", function(){
 			"journal-material.service-localdb.DBService",
 			function(_QuestFactory, _QuestService, _QuestSeeder, _DBService){
 				QuestSeeder = _QuestSeeder;
-				expect(QuestSeeder).not.toBeUndefined();
+				expect(QuestSeeder).not.toBeNull();
 				QuestService = _QuestService;
-				expect(QuestService).not.toBeUndefined();
+				expect(QuestService).not.toBeNull();
 				DBService = _DBService;
-				expect(DBService).not.toBeUndefined();
+				expect(DBService).not.toBeNull();
 				QuestFactory = _QuestFactory;
-				expect(QuestFactory).not.toBeUndefined();
+				expect(QuestFactory).not.toBeNull();
 
 				localStorage.clear();
 
@@ -40,7 +40,7 @@ describe("Quest Seeding", function(){
 				})
 				.catch(function(error){
 					console.log("ERROR CLEARING DB " + error);
-					expect(error).toBeUndefined();
+					expect(error).toBeNull();
 				})
 				.finally(done)
 			}
@@ -51,10 +51,12 @@ describe("Quest Seeding", function(){
 		QuestSeeder.createSet1()
 		.then(function(){
 			return QuestService.all();
-		}).then(function(res){
-			expect(res.length).toBe(10);
-			done();
 		})
+		.then(function(res){
+			expect(res).not.toBeNull();
+			expect(res.length).toBe(10);
+		})
+		.finally(done)
 		.catch(function(err){ 
 			console.log(err.toString());
 			done.fail(err);

@@ -30,6 +30,10 @@ module.exports = function(config) {
             './www/js/quests/directives.js',
             './www/js/quests/services.js',
             './www/js/quests/seed.js',
+            './www/js/journal/controllers.js',
+            './www/js/journal/directives.js',
+            './www/js/journal/services.js',
+            './www/js/journal/seed.js',
             // END: APP
 
             // TESTS
@@ -46,7 +50,7 @@ module.exports = function(config) {
           type : 'html',
           dir : 'coverage/'
         },
-        singleRun: true,
+        singleRun: false,
       }
   );
 };

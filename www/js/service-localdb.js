@@ -9,8 +9,18 @@ angular.module('journal-material.service-localdb', [])
 		this.dbname = null;
 		this.connect = function(dbname){
 			self.dbname = dbname;
-			self.Pouch = new PouchDB(self.dbname)
-			return self.recreateViews();
+			var promise = new Promise(function(resolve, reject){
+					self.Pouch = new PouchDB(self.dbname);
+					if(self.Pouch) 
+						resolve();
+					else
+						reject();	
+				})
+				;
+
+			return promise
+				.then(self.recreateViews)
+				;
 		}
 
 		/** SORTING PROTOCOL **/
@@ -54,9 +64,12 @@ angular.module('journal-material.service-localdb', [])
 		this.all = function(options){
 			return self.Pouch.allDocs(options)
 			.then(function(res){
-				return res.rows.map(function(it){
-					return it.doc;
-				});
+				if(res.rows.length > 0)
+					return res.rows.map(function(it){
+						return it.doc;
+					});
+				else
+					return [];
 			})
 			;
 		}
@@ -67,7 +80,14 @@ angular.module('journal-material.service-localdb', [])
 
 		this.queryView = function(view, options){
 			options = options || {};
-			return self.Pouch.query(view, options).catch(function(error){console.log(error);});
+			return self.Pouch.query(view, options)
+				.catch(function(error){ 
+					if(error.status == 404) // undefined view
+						throw new self.DBException("undefined view " + view);
+					else
+						return error;
+				})
+				;
 		}
 
 		this.mapRedios = function(mapredios){
@@ -99,17 +119,20 @@ angular.module('journal-material.service-localdb', [])
 
 		this.clear = function(){
 			return self.Pouch.allDocs()
-				.then(function(result){
-						var rows = result.rows.filter(function(row){
-							return row.id.indexOf("_design/") != 0;
-						})
-						var promises = rows.map(function(row){
-							return self.destroyIds(row.id, row.value.rev);
-						})
-
-						return Promise.all(promises).then(function() { return; })
-					}
-				)
+				.then(function(docs){
+					if(docs)
+						return Promise.mapSeries(docs.rows, function(doc){
+								return self.destroyIds(doc.id, doc.value.rev)
+									;
+							})
+							.all()
+							;
+				})
+				.then(function(){
+					return self.Pouch.compact();
+				})
+				.then(self.recreateViews)
+				;
 		}
 
 		this.sync = function(url, remote_options) {
@@ -158,9 +181,6 @@ angular.module('journal-material.service-localdb', [])
 		}
 
 		this.recreateViews = function(){
-			if(!self.Pouch)
-				return;
-
 			var views = RegisteredViews();
 			var promises = []
 			for(var i in views) {
@@ -177,6 +197,63 @@ angular.module('journal-material.service-localdb', [])
 			return Promise.all(promises);
 		}
 		/** END: VIEW MANAGEMENT **/
+
+		/** @section Exceptions **/
+		this.DBException = function(message){
+			this.message = message;
+		}
+		this.DBException.prototype = new Error();
+		/** @endsection Exceptions **/
 	}
 ])
+
+.service("journal-material.service-localdb.FakerService",
+[
+	function(){
+		var self = this;
+
+		/** @section Public **/
+		this.withFaker = function(callback){
+			return function(){
+				return EnsureFakerLoaded()
+					.then(function(){
+						return callback();
+					})
+			}
+		}
+		/** @endsection Public **/
+
+		/** @section Private **/
+		var faker_loaded = null;
+		var EnsureFakerLoaded = function(){
+			if (!faker_loaded)
+				faker_loaded = new Promise(function(resolve, reject){
+					if(faker)
+						resolve();
+					else
+						requirejs(["lib/faker.min"], 
+							function(faker){
+								resolve()
+							},
+							function(error){
+								reject(error);
+							}
+						)
+				})
+				;
+
+			return faker_loaded;
+		};
+		/** @endsection Private **/
+	}
+])
+
+.run([
+	"journal-material.service-localdb.DBService",
+	function(DBService){
+		var userdb_name = "username" + "_localdb"; //TODO: get user name
+		return DBService.connect(userdb_name);
+	}
+])
+
 ;

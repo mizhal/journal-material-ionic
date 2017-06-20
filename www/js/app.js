@@ -11,8 +11,14 @@ angular.module('journal-material', [
   /** QUESTS MODULE **/
   'journal-material.Quests.controllers',
   'journal-material.Quests.services',
-  'journal-material.Quests.directives'
+  'journal-material.Quests.directives',
   /** FIN: QUESTS MODULE **/
+
+  /** JOURNAL MODULE **/
+  'journal-material.Journal.controllers',
+  'journal-material.Journal.services',
+  'journal-material.Journal.directives'
+  /** FIN: JOURNAL MODULE **/  
 
 ])
 
