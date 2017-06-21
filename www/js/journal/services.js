@@ -129,7 +129,7 @@ angular.module("journal-material.Journal.services", [])
 		/** @endsection Db Views **/
 
 		this.init = function(){
-			DBService.checkDBViews(this.views);
+			DBService.checkDBViews(self.views);
 		}
 	}
 ])

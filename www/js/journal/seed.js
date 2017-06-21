@@ -30,7 +30,7 @@ angular.module("journal-material.Journal.seed", ["journal-material.Quests.servic
 			return Promise
 				.mapSeries(new Array(5), function(){
 					var q = QuestFactory._new(faker.lorem.sentence(), faker.lorem.paragraph());
-					return QuestService.save(q).then(function(){ return q; });
+					return QuestService.save(q);
 				})
 				.map(function(quest){
 					return Promise

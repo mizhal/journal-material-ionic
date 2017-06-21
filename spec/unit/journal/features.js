@@ -49,12 +49,11 @@ describe("Journal Seeding", function(){
 
 	it("shows last entries for quest", function(done){
 		JournalSeeder.createSet2WithQuests()
-			.then(function(){
-				return QuestService.all();
-			})
 			.then(function(quests){
 				expect(quests.length).toBe(5);
-
+				return quests;
+			})
+			.then(function(quests){
 				return Promise
 					.mapSeries(quests, function(q){
 						return JournalService.getEntriesForQuest(q._id);

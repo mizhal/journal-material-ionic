@@ -47,7 +47,7 @@ angular.module('journal-material.service-localdb', [])
 			return self.Pouch.put(object)
 				.then(function(docsum){
 					object._rev = docsum.rev;
-					return docsum;
+					return object;
 				})
 				;
 		};

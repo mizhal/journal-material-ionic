@@ -253,7 +253,7 @@ angular.module('journal-material.Quests.services', [])
 		/** END: DB VIEWS **/
 
 		this.init = function(){
-			DBService.checkDBViews(this.views);
+			DBService.checkDBViews(self.views);
 		}
 	}
 ])
