@@ -49,8 +49,8 @@ angular.module("journal-material.Journal.services", [])
 
 		this.getEntriesForQuest = function(quest_id, limit, sort_criteria, include_deleted) {
 			var options = {
-				startKey: [quest_id],
-				endKey: [quest_id, {}, {}],
+				startkey: [quest_id],
+				endkey: [quest_id, {}, {}],
 				include_docs: true
 			};
 			if(limit)
@@ -139,7 +139,8 @@ angular.module("journal-material.Journal.services", [])
 			var proto = HasTimestampFactory._new();
 
 			Object.assign(proto, {
-				_id: this.type + "-" + proto.uuid,
+				_id: self.type + "-" + proto.uuid,
+				type: self.type,
 				text: text,
 				quest_id: quest_id,
 				edit_status: EnumService.EditStatus.EDITABLE
