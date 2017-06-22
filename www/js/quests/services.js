@@ -43,10 +43,12 @@ angular.module('journal-material.Quests.services', [])
 	"journal-material.Quests.services.QuestServiceInitializer",
 	"journal-material.Quests.services.TaskFactory",
 	"journal-material.Quests.services.QuestStatusChangeFactory",
+	"journal-material.Quests.services.QuestServiceInitializer",
 	function($q, SortCriteriaService, DBService, EnumService, QuestFactory, QuestServiceInitializer, 
-		TaskFactory, QuestStatusChangeFactory){
+		TaskFactory, QuestStatusChangeFactory, QuestServiceInitializer){
 
 		var self = this;
+		QuestServiceInitializer.init(); // services are singletons, it is expected to not execute this many times
 
 		/** PUBLIC **/
 
@@ -332,14 +334,6 @@ angular.module('journal-material.Quests.services', [])
 
 			return proto;			
 		}
-	}
-])
-
-.run([
-	"journal-material.Quests.services.QuestServiceInitializer",
-	function(QuestServiceInitializer){
-
-		QuestServiceInitializer.init();
 	}
 ])
 ;

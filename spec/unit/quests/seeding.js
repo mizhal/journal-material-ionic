@@ -34,15 +34,15 @@ describe("Quest Seeding", function(){
 
 				localStorage.clear();
 
-				DBService.connect("test")
-				.then(function(){
-					return DBService.clear();	
-				})
-				.catch(function(error){
-					console.log("ERROR CLEARING DB " + error);
-					expect(error).toBeNull();
-				})
-				.finally(done)
+				DBService.connect("test-quest-seeding")
+					.then(function(){
+						return DBService.clear();	
+					})
+					.catch(function(error){
+						console.log("ERROR CLEARING DB " + error);
+						expect(error).toBeNull();
+					})
+					.finally(done)
 			}
 		])
 	})

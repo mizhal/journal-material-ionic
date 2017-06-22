@@ -24,7 +24,11 @@ angular.module("journal-material.Journal.services", [])
 	"journal-material.service-localdb.DBService",
 	"journal-material.Journal.services.EnumService",
 	"journal-material.Journal.services.JournalEntryFactory",
-	function($q, SortCriteriaService, DBService, EnumService, JournalEntryFactory){
+	"journal-material.Journal.services.JournalServiceInitializer",
+	function($q, SortCriteriaService, DBService, EnumService, JournalEntryFactory, JournalServiceInitializer){
+
+		var self = this;
+		JournalServiceInitializer.init(); 
 
 		/* @section PUBLIC */
 		this.all = function() {
@@ -101,22 +105,11 @@ angular.module("journal-material.Journal.services", [])
 		/** @section Db Views **/
 		this.views = {};
 
-		var name = "journal_by_quest"
-		this.views[name] = {
-			name: name,
-			_id: "_design/" + name,
+		this.views["journal_by_quest"] = {
+			_id: "_design/journal_by_quest",
 			views: {
-				by_updated: { /** [UpdatedAt, Quest-Id, EditStatus] -> Entry **/
-					map: function(journal_entry, request){
-						if(journal_entry.type == "$$1")
-							return emit(
-								[journal_entry.updated_at, journal_entry.quest_id, journal_entry.edit_status], 
-								journal_entry
-							);
-					}.toString().replace("$$1", JournalEntryFactory.type)
-				},
 				by_quest: { /** [Quest-Id, UpdatedAt, EditStatus] -> Entry **/
-					map: function(journal_entry, request){
+					map: function(journal_entry){
 						if(journal_entry.type == "$$1")
 							return emit(
 									[journal_entry.quest_id, journal_entry.updated_at, journal_entry.edit_status], 
@@ -156,12 +149,4 @@ angular.module("journal-material.Journal.services", [])
 		}
 	}
 ])
-
-.run([
-	"journal-material.Journal.services.JournalServiceInitializer",
-	function(JournalServiceInitializer){
-		JournalServiceInitializer.init();
-	}
-])
-
 ;

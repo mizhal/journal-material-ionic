@@ -30,20 +30,23 @@ angular.module("journal-material.Journal.seed", ["journal-material.Quests.servic
 			return Promise
 				.mapSeries(new Array(5), function(){
 					var q = QuestFactory._new(faker.lorem.sentence(), faker.lorem.paragraph());
-					return QuestService.save(q);
-				})
-				.map(function(quest){
-					return Promise
-						.mapSeries(
-							new Array(faker.random.number({min: 1, max: 5})),
-							function(){
-								return JournalEntryFactory._new(faker.lorem.paragraph(), quest._id);
-							}
-						).map(function(entry){
-							return JournalService.save(entry);
+					return QuestService.save(q)
+						.then(function(quest){
+
+							return Promise
+								.mapSeries(
+									new Array(faker.random.number({min: 1, max: 5})),
+									function(){
+										var entry = JournalEntryFactory._new(faker.lorem.paragraph(), quest._id);
+										return JournalService.save(entry);	
+									}
+								)
+								.all()
+								.then(function(){
+									return quest;
+								})
+								;
 						})
-						.all()
-						;
 				})
 				.all()
 				;			

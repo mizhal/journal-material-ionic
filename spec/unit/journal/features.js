@@ -1,4 +1,4 @@
-describe("Journal Seeding", function(){
+describe("Journal Features", function(){
 
 	beforeEach(module("journal-material.service-localdb"));
 	beforeEach(module("journal-material.services"));
@@ -32,17 +32,15 @@ describe("Journal Seeding", function(){
 				DBService = _DBService;
 				QuestService = _QuestService;
 
-				localStorage.clear();
-
-				DBService.connect("test")
-				.then(function(){
-					return DBService.clear();	
-				})
-				.catch(function(error){
-					console.log("ERROR CLEARING DB " + error);
-					expect(error).toBeNull();
-				})
-				.finally(done)
+				DBService.connect("test-journal-features")
+					.then(function(){
+						return DBService.clear();	
+					})
+					.catch(function(error){
+						console.log("ERROR CLEARING DB " + error);
+						expect(error).toBeNull();
+					})
+					.finally(done)
 			}
 		])
 	})
@@ -53,19 +51,22 @@ describe("Journal Seeding", function(){
 				expect(quests.length).toBe(5);
 				return quests;
 			})
-			.then(function(quests){
-				return Promise
-					.mapSeries(quests, function(q){
-						return JournalService.getEntriesForQuest(q._id);
+			.mapSeries(function(q){
+				JournalService.all()
+					.then(function(res){ 
+						expect(res.length).toBeGreaterThan(0);
 					})
-					.map(function(entries){
+					;
+
+				return JournalService.getEntriesForQuest(q._id)
+					.then(function(entries){
 						expect(entries.length).toBeGreaterThan(0);
 					})
-					.all()
 					;
 			})
+			.all()
 			.catch(function(err){
-				done.fail(err);
+				return done.fail(err);
 			})
 			.finally(done)
 			;

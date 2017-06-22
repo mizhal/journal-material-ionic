@@ -7,6 +7,7 @@ angular.module('journal-material.service-localdb', [])
 		
 		this.Pouch = null;
 		this.dbname = null;
+
 		this.connect = function(dbname){
 			self.dbname = dbname;
 			var promise = new Promise(function(resolve, reject){
@@ -61,7 +62,7 @@ angular.module('journal-material.service-localdb', [])
 				})
 		};
 
-		this.all = function(options){
+		this.all = function(options = {}){
 			return self.Pouch.allDocs(options)
 			.then(function(res){
 				if(res.rows.length > 0)
@@ -82,8 +83,9 @@ angular.module('journal-material.service-localdb', [])
 			options = options || {};
 			return self.Pouch.query(view, options)
 				.catch(function(error){ 
-					if(error.status == 404) // undefined view
+					if(error.status == 404) { // undefined view
 						throw new self.DBException("undefined view " + view);
+					}
 					else
 						return error;
 				})
@@ -122,8 +124,12 @@ angular.module('journal-material.service-localdb', [])
 				.then(function(docs){
 					if(docs)
 						return Promise.mapSeries(docs.rows, function(doc){
-								return self.destroyIds(doc.id, doc.value.rev)
+								if (doc.id.match(/^_design\/.*$/))
+									return
+								else {
+									return self.destroyIds(doc.id, doc.value.rev)
 									;
+								}
 							})
 							.all()
 							;
