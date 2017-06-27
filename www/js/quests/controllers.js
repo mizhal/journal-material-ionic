@@ -180,7 +180,7 @@ angular.module('journal-material.Quests.controllers', [])
 		}
 
 		$scope.addEntry = function(){
-			$state.go()
+			$state.go('app.journal.edit', {quest_id: $scope.quest._id})
 		}
 
 		$scope.setFocus = function(quest){

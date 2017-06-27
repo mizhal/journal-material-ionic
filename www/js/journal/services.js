@@ -135,13 +135,14 @@ angular.module("journal-material.Journal.services", [])
 		this.type = "Je";
 		this.interfaces = HasTimestampFactory.interfaces + [this.type];
 
-		this._new = function(text /* :String */, quest_id /* :uuid? */) {
+		this._new = function(text /* :String */, quest_id /* :uuid? */, title /* :String */) {
 			var proto = HasTimestampFactory._new();
 
 			Object.assign(proto, {
 				_id: self.type + "-" + proto.uuid,
 				type: self.type,
 				text: text,
+				title: title,
 				quest_id: quest_id,
 				edit_status: EnumService.EditStatus.EDITABLE
 			});

@@ -33,6 +33,14 @@
 .right {
 	float: right;
 }
+
+ion-view.editor ion-footer-bar {
+	height: 64px;
+}
+
+.tleft {
+	text-align: left;
+}
 /*** END: COMMON MIXINS **/
 
 /*** MENU **/
@@ -179,6 +187,23 @@
 /*** JOURNAL MAIN ***/
 .hero.journal-main {
 	background-image: url('../img/journal.png');
+}
+
+article.journal-entry form .id {
+	margin-right: 1em;
+}
+
+article.journal-entry form .quest-context {
+	font-style: italic;
+	color: #440E0E;
+	font-size: 0.85em;
+}
+
+article.journal-entry form .quest-context input {
+	font-style: italic;
+	background-color: transparent;
+	color: #440E0E;
+	margin-left: 1em;
 }
 /*** END: JOURNAL MAIN ***/
 

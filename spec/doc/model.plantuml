@@ -62,7 +62,8 @@
 
 	package Journal {
 		class JournalEntry <<HasTimestamp>> {
-			content: string
+			title: string
+			text: string
 		}
 
 		class JournalMetadata <<HasTimestamp>> {

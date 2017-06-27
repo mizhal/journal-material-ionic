@@ -1,13 +1,29 @@
-<ion-view view-title="Journal">
+<ion-view view-title="Journal Edit" class="editor">
 	<ion-content>
-            <ion-list>
-                <ion-item>
-                    <ion-input placeholder="Title"></ion-input>
-                </ion-item>
-                <ion-item>
-                        <ion-label stacked>Content:</ion-label>
-                        <ion-textarea placeholder="Write something"></ion-textarea>
-                </ion-item>
-            </ion-list>
+        <article class="journal-entry">
+            <form name="editJournalForm" novalidate>
+                <div class="form list">
+                    <label class="item item-input">
+                        <span class="id">#{{entry.shortUuid}}</span>
+                        <input type="text" ng-minlenght="3" placeholder="Title (optional)" 
+                            ng-model="entry.title"/>
+                    </label>
+                    <label class="item item-input quest-context" ng-if="quest">
+                        from: <input type="text" ng-model="quest.name" readonly/>
+                    </label>
+                    <label class="item item-input">
+                        <textarea placeholder="Write something" ng-bind-html="entry.text" 
+                            rows="15" required>
+                        </textarea>
+                    </label>
+                </div>
+            </form>
+        </article>
 	</ion-content>
+    <ion-footer-bar>
+        <div class="form list full-block">
+            <button ng-click="save()" ng-disabled="editJournalForm.$invalid" class="decorated">Save</button>
+            <button ng-click="cancel()" class="decorated right">Cancel</button>
+        </div>
+    </ion-footer-bar>
 </ion-view>
