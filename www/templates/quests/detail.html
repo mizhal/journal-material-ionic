@@ -10,7 +10,10 @@
 					ng-click="addTask()">
 					<i class="icon ion-checkmark-circled"></i>
 				</button>
-				<button class="button button-energized button-fab button-fab-bottom-right"><i class="icon ion-chatboxes"></i></button>
+				<button class="button button-energized button-fab button-fab-bottom-right"
+					ng.click="addEntry()">
+					<i class="icon ion-chatboxes"></i>
+				</button>
 			</div>
 			<div class="list">
 				<div class="separator1"></div>
@@ -35,14 +38,7 @@
 						</li>
 					</ol>
 				</section>
-				<section class="journal item">
-					<header>Journal:</header>
-					<ol>
-						<li class="journal-entry" ng-repeat="entry in quest.journal">
-							<div ng-bind-html="entry.text"></div>
-						</li>
-					</ol>
-				</section>
+				<quest-journal quest="quest" />
 			</list>
 		</article>
 	</ion-content>

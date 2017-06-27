@@ -145,12 +145,13 @@ angular.module('journal-material.Quests.controllers', [])
 .controller('journal-material.Quests.controllers.DetailCtrl',
 [
 	"$scope",
+	"$state",
 	"$stateParams",
 	"$ionicHistory",
 	"$ionicPopup",
 	"journal-material.Quests.services.QuestService",
 	"journal-material.Quests.services.EnumService",
-	function($scope, $stateParams, $ionicHistory, $ionicPopup, QuestService, EnumService){
+	function($scope, $state, $stateParams, $ionicHistory, $ionicPopup, QuestService, EnumService){
 		$scope.id = $stateParams.id;
 		$scope.title = "Quest";
 		if($scope.id) {
@@ -176,6 +177,10 @@ angular.module('journal-material.Quests.controllers', [])
 				var task = QuestService.newTask(res);
 				$scope.quest.tasks.push(task);
 			})
+		}
+
+		$scope.addEntry = function(){
+			$state.go()
 		}
 
 		$scope.setFocus = function(quest){

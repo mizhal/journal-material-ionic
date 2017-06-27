@@ -1,0 +1,8 @@
+<section class="journal item">
+    <header>Journal:</header>
+    <ol>
+        <li class="journal-entry" ng-repeat="entry in entries">
+            <div ng-bind-html="entry.text"></div>
+        </li>
+    </ol>
+</section>

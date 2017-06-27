@@ -199,6 +199,16 @@ angular.module('journal-material', [
       }
     }
   })
+
+  .state('app.journal.edit', {
+    url: '/edit/{quest_id}',
+    views: {
+      content: {
+        templateUrl: 'templates/journal/edit.html',
+        controller: 'journal-material.Journal.controllers.EditController'
+      }
+    }
+  })
   /*** END: JOURNAL MODULE ***/
 
   ;

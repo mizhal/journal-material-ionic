@@ -1,0 +1,3 @@
+* journal-mat-ion
+** Vista de diario embebida en quest
+*** [TODO] Detalle basico de diario.
