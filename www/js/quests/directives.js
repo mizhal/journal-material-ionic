@@ -1,76 +1,37 @@
 angular.module('journal-material.Quests.directives', [])
 
-.directive("quest-actions", function(){
-	return {
-		templateUrl: "directives/quests/quest-actions.html"
-	}
-})
+.directive("questJournal",
+	function(){
 
-.directive("quest-description", function(){
-	return {
-		templateUrl: "directives/quests/quest-description.html"
-	}
-})
+		var controller = [
+			"$scope",
+			"journal-material.Journal.services.JournalService", 
+			function($scope, JournalService){
+				var cself = this;
+				
+				$scope.entries = [];
 
-.directive("quest-header", function(){
-	return {
-		templateUrl: "directives/quests/quest-header.html"
-	}
-})
+				$scope.update = function(){
+					JournalService.getEntriesForQuest($scope.quest._id).then(function(res){
+						$scope.entries = res;
+					})
+				};
 
-.directive("quest-inventory", function(){
-	return {
-		templateUrl: "directives/quests/quest-inventory.html"
-	}
-})
+				$scope.$on("journal-update", $scope.update);
 
-.directive("quest-inventory-item", function(){
-	return {
-		templateUrl: "directives/quests/quest-inventory-item.html"
-	}
-})
-
-.directive("quest-journal", [
-	"journal-material.Journal.services.JournalService",
-	function(JournalService){
-		var controller = function(){
-			var cself = this;
-			
-			$scope.entries = [];
-
-			$scope.$on("journal-update", function(event, args){
-				JournalService.getEntriesForQuest($scope.quest._id).then(function(res){
-					$scope.entries = res;
-				})
-				;
-			})
-			;
-
-			$scope.$emit("journal-update");
-		}
+				$scope.update();
+			}
+		]
 
 		return {
+			restrict: "E",
+			replace: true,
 			templateUrl: "directives/quests/quest-journal.html",
 			controller: controller,
-			controllerAs: "cself",
-			bindToController: true,
 			scope: {
-				quest: "=",
+				quest: "="
 			}
 		}
 	}
-])
-
-.directive("quest-todo-item", function(){
-	return {
-		templateUrl: "directives/quests/quest-todo-item.html"
-	}
-})
-
-.directive("quest-track", function(){
-	return {
-		templateUrl: "directives/quests/quest-track.html"
-	}
-})
-
+)
 ;

@@ -145,20 +145,20 @@ angular.module('journal-material.Quests.controllers', [])
 .controller('journal-material.Quests.controllers.DetailCtrl',
 [
 	"$scope",
+	"questData",
+	"$rootScope",
 	"$state",
 	"$stateParams",
 	"$ionicHistory",
 	"$ionicPopup",
 	"journal-material.Quests.services.QuestService",
 	"journal-material.Quests.services.EnumService",
-	function($scope, $state, $stateParams, $ionicHistory, $ionicPopup, QuestService, EnumService){
+	function($scope, questData, $rootScope, $state, $stateParams, $ionicHistory, 
+		$ionicPopup, QuestService, EnumService){
 		$scope.id = $stateParams.id;
+		$scope.quest = questData;
 		$scope.title = "Quest";
-		if($scope.id) {
-			QuestService.get($scope.id).then(function(quest){
-				$scope.quest = quest;
-			})
-		} else {
+		if(!$scope.id) {
 			$ionicHistory.goBack();
 		}
 

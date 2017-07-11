@@ -2,6 +2,7 @@ angular.module('journal-material', [
   'ionic', 
   'ionic-datepicker',
   'ngMessages',
+  'ngSanitize',
   //'ionic-material',
   
   'journal-material.controllers',
@@ -38,8 +39,6 @@ angular.module('journal-material', [
         // org.apache.cordova.statusbar required
         StatusBar.styleDefault();
       }
-
-      return DBService.connect("username");
     });
   }
 ])
@@ -138,7 +137,14 @@ angular.module('journal-material', [
     views: {
       content: {
         templateUrl: 'templates/quests/detail.html',
-        controller: 'journal-material.Quests.controllers.DetailCtrl'
+        controller: 'journal-material.Quests.controllers.DetailCtrl',
+        resolve: {
+          questData: ["$stateParams", "journal-material.Quests.services.QuestService",
+            function($stateParams, QuestService){
+              return QuestService.get($stateParams.id);  
+            }
+          ]
+        }
       }
     }
   })
