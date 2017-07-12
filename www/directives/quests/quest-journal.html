@@ -1,8 +1,15 @@
 <section class="journal item">
-    <header>Journal:</header>
-    <ol>
-        <li class="journal-entry" ng-repeat="entry in entries">
-            <div ng-bind-html="entry.text"></div>
-        </li>
-    </ol>
+    <h2>
+        Journal
+    </h2>
+    <article class="card journal-entry embedded" ng-repeat="entry in entries">
+        <div class="item item-divider">
+            <span class="id">#{{entry.shortUuid}} </span>
+            <span class="timestamp">{{entry.created_at | date : "short" }} </span>
+            <span class="title" ng-if="entry.title">- {{entry.title}}</span>
+        </div>
+        <div class="item item-body item-text-wrap">
+            <p ng-bind-html="entry.text | longText"></p>
+        </div>
+    </article>
 </section>

@@ -27,16 +27,16 @@
 				</div>
 				<div class="separator1"></div>
 				<section class="description item">
-					<header>Description:</header>
-					<div ng-bind-html="quest.description"></div>
+					<header><h2>Description<h2></header>
+					<p ng-bind-html="quest.description"></p>
 				</section>
 				<section class="track item">
-					<header>Track:</header>
-					<ol>
-						<li class="tasks" ng-repeat="task in quest.tasks">
+					<ion-list>
+						<ion-list-header>Tasks</ion-list-header>
+						<ion-item class="tasks" ng-repeat="task in quest.tasks">
 							<p>{{task.name}}</p>
-						</li>
-					</ol>
+						</ion-item>					
+					</ion-list>
 				</section>
 				<quest-journal quest="quest" />
 			</list>

@@ -8,6 +8,7 @@ angular.module('journal-material', [
   'journal-material.controllers',
   'journal-material.service-localdb', 
   'journal-material.services',
+  'journal-material.filters',
 
   /** QUESTS MODULE **/
   'journal-material.Quests.controllers',
