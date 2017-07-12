@@ -1,0 +1,7 @@
+@import "themes/dark_souls/colors";
+
+article.journal-entry.embedded {
+    .id {
+        color: map-get($colors, 'danger');
+    }
+}
